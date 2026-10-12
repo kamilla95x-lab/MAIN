@@ -1,0 +1,1655 @@
+<!doctype html>
+<html lang="nl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Jaarlijkse Vakantie Leerplatform</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+<style>
+/* Layout: werkblad van een loonadministrateur — vaste navigatiebalk, links de inhoudstafel als register, rechts het "dossier"; cijfers in mono zoals op een loonfiche, markeerstift-geel voor kerncijfers. */
+:root{
+  --paper:#f6f8f7;
+  --sheet:#ffffff;
+  --ink:#14242e;
+  --ink-soft:#4b5d68;
+  --rule:#d6dfdd;
+  --rule-strong:#b7c5c2;
+  --accent:#0f5f6b;
+  --accent-ink:#ffffff;
+  --accent-soft:#e2efef;
+  --marker:#ffe56b;
+  --marker-ink:#1d1a05;
+  --good:#1d7a46;
+  --good-soft:#e3f3e8;
+  --bad:#b23a2e;
+  --bad-soft:#f8e6e3;
+  --warn-soft:#fff6d6;
+  --warn-line:#d8b21f;
+  --shadow:0 1px 2px rgba(20,36,46,.06),0 6px 20px rgba(20,36,46,.06);
+  --f-display:"Bricolage Grotesque","Segoe UI",system-ui,sans-serif;
+  --f-body:"IBM Plex Sans","Segoe UI",system-ui,-apple-system,sans-serif;
+  --f-mono:"IBM Plex Mono",ui-monospace,"SFMono-Regular",Menlo,Consolas,monospace;
+  --top: env(safe-area-inset-top, 0px);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --paper:#0f171b; --sheet:#152127; --ink:#e4ecec; --ink-soft:#9fb1b5;
+    --rule:#26363d; --rule-strong:#354a52; --accent:#5cc4cf; --accent-ink:#0b1417;
+    --accent-soft:#183a40; --marker:#e9cf4a; --marker-ink:#1a1703;
+    --good:#5fd08d; --good-soft:#163526; --bad:#ff8a7c; --bad-soft:#3a1d1a;
+    --warn-soft:#2f2a12; --warn-line:#b89a22;
+    --shadow:0 1px 2px rgba(0,0,0,.3),0 6px 20px rgba(0,0,0,.25);
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#0f171b; --sheet:#152127; --ink:#e4ecec; --ink-soft:#9fb1b5;
+  --rule:#26363d; --rule-strong:#354a52; --accent:#5cc4cf; --accent-ink:#0b1417;
+  --accent-soft:#183a40; --marker:#e9cf4a; --marker-ink:#1a1703;
+  --good:#5fd08d; --good-soft:#163526; --bad:#ff8a7c; --bad-soft:#3a1d1a;
+  --warn-soft:#2f2a12; --warn-line:#b89a22;
+  --shadow:0 1px 2px rgba(0,0,0,.3),0 6px 20px rgba(0,0,0,.25);
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--f-body);font-size:16px;line-height:1.6}
+[hidden]{display:none!important}
+button,input,select{font:inherit;color:inherit}
+button{cursor:pointer}
+:focus-visible{outline:3px solid var(--accent);outline-offset:2px;border-radius:4px}
+h1,h2,h3,h4{font-family:var(--f-display);line-height:1.15;text-wrap:balance;margin:0}
+.num,.mono{font-family:var(--f-mono);font-variant-numeric:tabular-nums}
+mark,.mk{background:var(--marker);color:var(--marker-ink);padding:0 .2em;border-radius:3px;font-weight:600}
+
+/* top bar */
+.topbar{position:sticky;top:var(--top);z-index:30;background:var(--sheet);border-bottom:1px solid var(--rule)}
+.topbar-in{max-width:1240px;margin:0 auto;padding:10px 16px;display:flex;gap:12px 20px;align-items:center;flex-wrap:wrap}
+.brand{display:flex;align-items:baseline;gap:10px;min-width:0;background:none;border:0;padding:0;text-align:left}
+.brand b{font-family:var(--f-display);font-weight:800;font-size:1.15rem;letter-spacing:-.01em}
+.brand span{font-size:.72rem;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-soft)}
+.search{flex:1 1 260px;position:relative;max-width:460px;margin-left:auto}
+.search input{width:100%;padding:9px 12px 9px 36px;border:1px solid var(--rule-strong);border-radius:8px;background:var(--paper)}
+.search svg{position:absolute;left:11px;top:50%;transform:translateY(-50%);width:16px;height:16px;stroke:var(--ink-soft);fill:none;stroke-width:2}
+.tabs{max-width:1240px;margin:0 auto;padding:0 16px;display:flex;gap:2px;overflow-x:auto;scrollbar-width:none}
+.tabs::-webkit-scrollbar{display:none}
+.tab{background:none;border:0;border-bottom:3px solid transparent;padding:9px 12px 8px;font-weight:500;color:var(--ink-soft);white-space:nowrap}
+.tab:hover{color:var(--ink)}
+.tab[aria-selected="true"]{color:var(--accent);border-bottom-color:var(--accent)}
+
+.wrap{max-width:1240px;margin:0 auto;padding-inline:16px;padding-block:28px 64px}
+.eyebrow{font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-soft);font-weight:600}
+.lead{color:var(--ink-soft);max-width:68ch}
+.btn{display:inline-flex;align-items:center;gap:8px;padding:9px 16px;border-radius:8px;border:1px solid var(--rule-strong);background:var(--sheet);font-weight:500}
+.btn:hover{border-color:var(--accent);color:var(--accent)}
+.btn.primary{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+.btn.primary:hover{filter:brightness(1.08);color:var(--accent-ink)}
+.btn.small{padding:5px 11px;font-size:.88rem}
+.chip{display:inline-flex;align-items:center;gap:6px;padding:4px 11px;border-radius:999px;border:1px solid var(--rule-strong);background:var(--sheet);font-size:.86rem}
+.chip[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+
+/* home */
+.hero{display:grid;grid-template-columns:minmax(0,1.4fr) minmax(0,1fr);gap:32px;align-items:start}
+.hero h1{font-size:clamp(2rem,4.6vw,3.3rem);font-weight:800;letter-spacing:-.02em;margin:8px 0 14px}
+.hero h1 em{font-style:normal;background:linear-gradient(transparent 58%,var(--marker) 58%);padding:0 .08em}
+.ledger{background:var(--sheet);border:1px solid var(--rule);border-radius:10px;box-shadow:var(--shadow);overflow:hidden}
+.ledger h3{font-size:.8rem;letter-spacing:.12em;text-transform:uppercase;padding:12px 16px;border-bottom:1px solid var(--rule);font-family:var(--f-body);color:var(--ink-soft)}
+.ledger ol{list-style:none;margin:0;padding:6px 0}
+.ledger li{display:flex;gap:12px;padding:6px 16px;font-size:.95rem;align-items:center}
+.ledger li .n{font-family:var(--f-mono);color:var(--ink-soft);font-size:.8rem;width:1.6em}
+.ledger li.cur{background:var(--accent-soft);font-weight:600}
+.ledger li.cur::after{content:"deze module";margin-left:auto;font-size:.7rem;letter-spacing:.1em;text-transform:uppercase;color:var(--accent)}
+.stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin:28px 0}
+.stat{background:var(--sheet);border:1px solid var(--rule);border-radius:10px;padding:14px 16px}
+.stat .v{font-family:var(--f-mono);font-size:1.6rem;font-weight:600}
+.stat .l{font-size:.82rem;color:var(--ink-soft)}
+.bar{height:6px;background:var(--rule);border-radius:4px;overflow:hidden;margin-top:8px}
+.bar i{display:block;height:100%;background:var(--accent);width:0;transition:width .4s}
+.chapgrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+.chapcard{text-align:left;background:var(--sheet);border:1px solid var(--rule);border-radius:10px;padding:18px;display:flex;flex-direction:column;gap:8px;min-width:0}
+.chapcard:hover{border-color:var(--accent)}
+.chapcard .k{font-family:var(--f-mono);font-size:.8rem;color:var(--accent);font-weight:600}
+.chapcard h3{font-size:1.3rem}
+.chapcard p{margin:0;color:var(--ink-soft);font-size:.92rem}
+.section-h{margin:40px 0 14px;display:flex;justify-content:space-between;align-items:baseline;gap:12px;flex-wrap:wrap}
+.section-h h2{font-size:1.5rem}
+
+/* learn */
+.learn{display:grid;grid-template-columns:290px minmax(0,1fr);gap:32px;align-items:start}
+.toc{position:sticky;top:calc(var(--top) + 112px);max-height:calc(100vh - 130px);overflow:auto;padding-right:4px}
+.toc details{border-bottom:1px solid var(--rule);padding:6px 0}
+.toc summary{font-family:var(--f-display);font-weight:700;padding:6px 4px;list-style:none;display:flex;gap:8px;align-items:baseline}
+.toc summary::-webkit-details-marker{display:none}
+.toc summary .k{font-family:var(--f-mono);font-size:.78rem;color:var(--accent)}
+.toc a{display:flex;gap:8px;padding:5px 8px;border-radius:6px;color:var(--ink-soft);text-decoration:none;font-size:.9rem;align-items:baseline}
+.toc a .k{font-family:var(--f-mono);font-size:.75rem;min-width:3.4em}
+.toc a .ck{margin-left:auto;color:var(--good);font-size:.85rem}
+.toc a:hover{background:var(--accent-soft);color:var(--ink)}
+.toc a.on{background:var(--accent);color:var(--accent-ink)}
+.toc a.on .ck{color:var(--accent-ink)}
+.toc-mobile{display:none;margin-bottom:16px}
+.toc-mobile select{width:100%;padding:10px;border-radius:8px;border:1px solid var(--rule-strong);background:var(--sheet)}
+.article{background:var(--sheet);border:1px solid var(--rule);border-radius:12px;padding:32px clamp(18px,4vw,44px);box-shadow:var(--shadow);min-width:0}
+.crumbs{font-size:.82rem;color:var(--ink-soft);display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.crumbs .pg{margin-left:auto;font-family:var(--f-mono);font-size:.78rem;border:1px solid var(--rule);padding:1px 8px;border-radius:4px}
+.article h2{font-size:clamp(1.6rem,3vw,2.1rem);margin:10px 0 20px;letter-spacing:-.01em}
+.article h2 .k{font-family:var(--f-mono);color:var(--accent);font-size:.6em;vertical-align:.25em;margin-right:10px;font-weight:500}
+.prose{max-width:70ch}
+.prose p{margin:0 0 14px}
+.prose h4{font-size:1.08rem;margin:24px 0 10px}
+.prose ul,.prose ol{margin:0 0 14px;padding-left:1.3em}
+.prose li{margin:4px 0}
+.prose li ul{margin:4px 0 4px}
+.box{border-radius:10px;padding:14px 18px;margin:18px 0;border:1px solid var(--rule)}
+.box > :last-child{margin-bottom:0}
+.box .bt{font-size:.72rem;letter-spacing:.13em;text-transform:uppercase;font-weight:700;margin-bottom:6px;display:block}
+.box.ex{background:var(--accent-soft);border-color:transparent}
+.box.ex .bt{color:var(--accent)}
+.box.warn{background:var(--warn-soft);border-color:var(--warn-line)}
+.box.no{background:var(--bad-soft);border-color:transparent}
+.box.no .bt{color:var(--bad)}
+.formula{font-family:var(--f-mono);font-size:1.5rem;text-align:center;padding:18px;border:1px dashed var(--rule-strong);border-radius:10px;margin:16px 0;letter-spacing:.04em}
+.tbl-wrap{overflow-x:auto;margin:14px 0 18px;border:1px solid var(--rule);border-radius:10px}
+table{border-collapse:collapse;width:100%;font-size:.93rem}
+th,td{padding:8px 12px;border-bottom:1px solid var(--rule);text-align:left;vertical-align:top}
+th{background:var(--paper);font-weight:600;font-size:.82rem;letter-spacing:.02em}
+tr:last-child td{border-bottom:0}
+td.num,th.num{text-align:right}
+tr.hit td{background:var(--marker);color:var(--marker-ink)}
+.tl{display:flex;gap:18px;flex-wrap:wrap;margin:12px 0}
+.tl-year{display:grid;grid-template-columns:repeat(4,46px);border:1px solid var(--rule-strong);border-radius:4px;overflow:hidden;font-family:var(--f-mono);font-size:.82rem;text-align:center}
+.tl-year span{padding:5px 0;border-right:1px solid var(--rule-strong)}
+.tl-year span:nth-child(4){border-right:0}
+.tl-year span.wl{background:var(--rule)}
+.tl-year b{grid-column:1/-1;border-top:1px solid var(--rule-strong);padding:4px 0;font-weight:500;background:var(--sheet)}
+.navfoot{display:flex;justify-content:space-between;gap:12px;margin-top:32px;padding-top:18px;border-top:1px solid var(--rule);flex-wrap:wrap}
+.readbtn[aria-pressed="true"]{background:var(--good-soft);border-color:var(--good);color:var(--good)}
+.flash-target{animation:flash 1.6s ease}
+@keyframes flash{0%,40%{background:var(--marker)}100%{background:transparent}}
+
+/* widget */
+.widget{border:1px solid var(--rule-strong);border-radius:10px;padding:16px 18px;margin:18px 0;background:var(--paper)}
+.widget .bt{font-size:.72rem;letter-spacing:.13em;text-transform:uppercase;font-weight:700;color:var(--accent);display:block;margin-bottom:8px}
+.field{display:flex;flex-direction:column;gap:4px;min-width:0}
+.field label{font-size:.82rem;color:var(--ink-soft);font-weight:500}
+.field input,.field select{padding:8px 10px;border:1px solid var(--rule-strong);border-radius:7px;background:var(--sheet);font-family:var(--f-mono);width:100%}
+.fields{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px}
+
+/* glossary */
+.gl-tools{display:flex;gap:12px;flex-wrap:wrap;align-items:center;margin:18px 0}
+.gl-tools input{flex:1 1 220px;padding:9px 12px;border:1px solid var(--rule-strong);border-radius:8px;background:var(--sheet)}
+.gl-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.term{background:var(--sheet);border:1px solid var(--rule);border-radius:10px;padding:16px 18px;min-width:0}
+.term h3{font-size:1.1rem;margin-bottom:6px}
+.term p{margin:0 0 8px;font-size:.94rem}
+.term .src{font-size:.8rem;color:var(--accent);background:none;border:0;padding:0;text-decoration:underline;text-underline-offset:3px}
+.letter{grid-column:1/-1;font-family:var(--f-display);font-weight:800;font-size:1.3rem;color:var(--accent);margin-top:8px;border-bottom:1px solid var(--rule);padding-bottom:4px}
+.flash-stage{display:grid;place-items:center;margin:20px 0}
+.card3d{width:min(560px,100%);aspect-ratio:16/10;max-width:100%;perspective:1200px;cursor:pointer;background:none;border:0;padding:0}
+.card3d .inner{position:relative;width:100%;height:100%;transition:transform .5s;transform-style:preserve-3d}
+.card3d.flip .inner{transform:rotateY(180deg)}
+.card3d .face{position:absolute;inset:0;backface-visibility:hidden;border-radius:14px;border:1px solid var(--rule-strong);background:var(--sheet);box-shadow:var(--shadow);display:flex;flex-direction:column;justify-content:center;align-items:center;padding:24px;text-align:center;overflow:auto}
+.card3d .face.back{transform:rotateY(180deg);background:var(--accent-soft);font-size:.98rem;line-height:1.55}
+.card3d .face h3{font-size:clamp(1.3rem,3.4vw,2rem)}
+.card3d .hint{position:absolute;bottom:12px;font-size:.75rem;color:var(--ink-soft);letter-spacing:.08em;text-transform:uppercase}
+
+/* quiz */
+.quiz-setup{background:var(--sheet);border:1px solid var(--rule);border-radius:12px;padding:22px;display:grid;gap:18px}
+.qcard{background:var(--sheet);border:1px solid var(--rule);border-radius:12px;padding:26px clamp(18px,4vw,36px);box-shadow:var(--shadow);max-width:820px}
+.qmeta{display:flex;justify-content:space-between;gap:10px;font-size:.84rem;color:var(--ink-soft);flex-wrap:wrap}
+.qtext{font-size:1.25rem;font-weight:600;margin:14px 0 18px;line-height:1.4;font-family:var(--f-body)}
+.opts{display:grid;gap:10px}
+.opt{text-align:left;padding:12px 16px;border:1px solid var(--rule-strong);border-radius:9px;background:var(--sheet);display:flex;gap:12px;align-items:flex-start}
+.opt .l{font-family:var(--f-mono);font-weight:600;color:var(--accent);min-width:1.2em}
+.opt:hover:not([disabled]){border-color:var(--accent)}
+.opt.right{border-color:var(--good);background:var(--good-soft)}
+.opt.wrong{border-color:var(--bad);background:var(--bad-soft)}
+.opt[disabled]{cursor:default}
+.feedback{margin-top:16px;padding:14px 16px;border-radius:9px;font-size:.95rem}
+.feedback.ok{background:var(--good-soft)}
+.feedback.ko{background:var(--bad-soft)}
+.feedback b{display:block;margin-bottom:4px}
+.qprog{height:5px;background:var(--rule);border-radius:4px;overflow:hidden;margin-top:12px}
+.qprog i{display:block;height:100%;background:var(--accent);transition:width .3s}
+.result{text-align:center;padding:30px 20px}
+.result .big{font-family:var(--f-mono);font-size:3.4rem;font-weight:600}
+.review{text-align:left;margin-top:24px;display:grid;gap:10px}
+.review div{padding:10px 14px;border-radius:8px;border:1px solid var(--rule);font-size:.92rem}
+.review div.ko{border-left:4px solid var(--bad)}
+.review div.ok{border-left:4px solid var(--good)}
+
+/* figures */
+.figs{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:12px}
+.fig{background:var(--sheet);border:1px solid var(--rule);border-radius:10px;padding:14px 16px;display:flex;flex-direction:column;gap:6px;text-align:left;min-width:0}
+.fig .v{font-family:var(--f-mono);font-size:1.45rem;font-weight:600;line-height:1.2}
+.fig .v span{background:var(--marker);color:var(--marker-ink);padding:0 .2em;border-radius:3px}
+.fig .d{font-size:.88rem;color:var(--ink-soft)}
+.fig .src{font-size:.78rem;color:var(--accent);background:none;border:0;padding:0;text-align:left;text-decoration:underline;text-underline-offset:3px;margin-top:auto}
+.fig.hide .v span{background:var(--rule);color:transparent}
+.memo{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin-top:16px}
+.memo button{min-height:86px;padding:10px;border:1px solid var(--rule-strong);border-radius:10px;background:var(--sheet);font-size:.85rem;line-height:1.3}
+.memo button.val{font-family:var(--f-mono);font-size:1.05rem;font-weight:600}
+.memo button.sel{border-color:var(--accent);box-shadow:0 0 0 2px var(--accent) inset}
+.memo button.done{background:var(--good-soft);border-color:var(--good);color:var(--good);cursor:default}
+.memo button.err{background:var(--bad-soft);border-color:var(--bad)}
+
+/* calc */
+.calcs{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}
+.calc{background:var(--sheet);border:1px solid var(--rule);border-radius:12px;padding:20px;display:flex;flex-direction:column;gap:14px;min-width:0}
+.calc h3{font-size:1.2rem}
+.calc .ref{font-size:.8rem;color:var(--accent);background:none;border:0;padding:0;text-decoration:underline;text-underline-offset:3px;align-self:flex-start}
+.out{background:var(--paper);border:1px solid var(--rule);border-radius:9px;padding:12px 14px;font-size:.92rem}
+.out .line{display:flex;justify-content:space-between;gap:12px;padding:3px 0;border-bottom:1px dotted var(--rule)}
+.out .line:last-child{border-bottom:0}
+.out .line b{font-family:var(--f-mono);font-variant-numeric:tabular-nums;white-space:nowrap}
+.out .line.tot{font-weight:700;border-top:1px solid var(--rule-strong);margin-top:4px;padding-top:6px}
+.out .line.tot b{background:var(--marker);color:var(--marker-ink);padding:0 .3em;border-radius:3px}
+.note{font-size:.8rem;color:var(--ink-soft)}
+
+/* search results */
+.sr{display:grid;gap:10px;max-width:880px}
+.sr button{text-align:left;background:var(--sheet);border:1px solid var(--rule);border-radius:10px;padding:14px 16px;display:grid;gap:4px}
+.sr button:hover{border-color:var(--accent)}
+.sr .t{font-weight:600}
+.sr .t small{font-family:var(--f-mono);color:var(--accent);margin-right:8px;font-weight:500}
+.sr .s{font-size:.9rem;color:var(--ink-soft)}
+.sr .type{font-size:.7rem;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-soft)}
+
+.cmp td:first-child{font-weight:600;width:22%}
+.foot{margin-top:56px;padding-top:16px;border-top:1px solid var(--rule);font-size:.82rem;color:var(--ink-soft)}
+
+@media (max-width:900px){
+  .hero{grid-template-columns:1fr}
+  .learn{grid-template-columns:1fr}
+  .toc{display:none}
+  .toc-mobile{display:block}
+  .calcs{grid-template-columns:1fr}
+  .stats{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+@media (max-width:640px){
+  .chapgrid,.gl-list{grid-template-columns:1fr}
+  .memo{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .search{max-width:none;order:3;flex-basis:100%}
+  .article{padding:22px 16px}
+  .formula{font-size:1.15rem}
+  .toc{top:calc(var(--top) + 150px)}
+  .brand span{display:none}
+}
+@media (prefers-reduced-motion:reduce){
+  *{transition:none!important;animation:none!important}
+}
+</style>
+</head>
+<body>
+<header class="topbar">
+  <div class="topbar-in">
+    <button class="brand" id="brand" type="button" aria-label="Naar start"><b>Jaarlijkse vakantie</b><span>Loonadministratie · 2025</span></button>
+    <div class="search" role="search">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
+      <input id="q" type="search" placeholder="Zoek in de volledige cursus… (bv. 13,07 %, C103, aanloopperiode)" autocomplete="off" aria-label="Zoeken in de cursus">
+    </div>
+  </div>
+  <nav class="tabs" role="tablist" aria-label="Onderdelen">
+    <button class="tab" role="tab" data-view="home">Start</button>
+    <button class="tab" role="tab" data-view="learn">Theorie</button>
+    <button class="tab" role="tab" data-view="terms">Begrippen</button>
+    <button class="tab" role="tab" data-view="flash">Flashcards</button>
+    <button class="tab" role="tab" data-view="quiz">Quiz</button>
+    <button class="tab" role="tab" data-view="figures">Kerncijfers</button>
+    <button class="tab" role="tab" data-view="calc">Rekentools</button>
+    <button class="tab" role="tab" data-view="compare">Arbeider vs bediende</button>
+  </nav>
+</header>
+
+<main class="wrap" id="main">
+  <!-- HOME -->
+  <section id="v-home" data-v>
+    <div class="hero">
+      <div>
+        <div class="eyebrow">Cursus Loonadministratie · VDAB Competentiecentra · april 2025</div>
+        <h1>Leer de regels van de <em>jaarlijkse vakantie</em> stap voor stap</h1>
+        <p class="lead">Alle theorie uit de cursus, opgedeeld in 4 hoofdstukken en 40 onderdelen. Lees de theorie, oefen de begrippen met flashcards, test jezelf met de quiz en reken de voorbeelden uit de cursus zelf na. Alles op deze site komt uitsluitend uit het cursusdocument.</p>
+        <div class="row" style="margin-top:18px">
+          <button class="btn primary" data-go="learn" type="button">Begin bij hoofdstuk 1 →</button>
+          <button class="btn" data-go="quiz" type="button">Test jezelf</button>
+          <button class="btn" id="resume" type="button" hidden>Ga verder waar je was</button>
+        </div>
+      </div>
+      <div class="ledger">
+        <h3>Structuur van de cursus Loonadministratie</h3>
+        <ol>
+          <li><span class="n">01</span>Aan de slag!</li>
+          <li><span class="n">02</span>Aanwerving personeel</li>
+          <li><span class="n">03</span>Basisbegrippen loonberekening</li>
+          <li><span class="n">04</span>Schorsing arbeidsovereenkomst</li>
+          <li><span class="n">05</span>Ziekte werknemer</li>
+          <li class="cur"><span class="n">06</span>Jaarlijkse vakantie</li>
+          <li><span class="n">07</span>Eindejaarspremie</li>
+          <li><span class="n">08</span>Einde arbeidsovereenkomst</li>
+        </ol>
+      </div>
+    </div>
+    <div class="stats" id="stats"></div>
+    <div class="section-h"><h2>Hoofdstukken</h2><span class="note">Klik op een hoofdstuk om te beginnen</span></div>
+    <div class="chapgrid" id="chapgrid"></div>
+    <div class="section-h"><h2>Zo gebruik je deze site</h2></div>
+    <div class="tbl-wrap"><table>
+      <tr><th>Onderdeel</th><th>Wat je er doet</th></tr>
+      <tr><td><b>Theorie</b></td><td>De volledige cursustekst per onderdeel, met paginaverwijzing. Markeer onderdelen als gelezen om je voortgang te volgen.</td></tr>
+      <tr><td><b>Begrippen</b></td><td>Alfabetische woordenlijst met de termen uit de cursus, telkens met een link naar de plek in de theorie.</td></tr>
+      <tr><td><b>Flashcards</b></td><td>Draai kaartjes om en duid aan of je het begrip al kent. Kaartjes die je niet kent, komen terug.</td></tr>
+      <tr><td><b>Quiz</b></td><td>Meerkeuze- en juist/fout-vragen per hoofdstuk, met uitleg en verwijzing bij elk antwoord.</td></tr>
+      <tr><td><b>Kerncijfers</b></td><td>Alle percentages, bedragen, termijnen en formulieren op één plek, plus een koppelspel.</td></tr>
+      <tr><td><b>Rekentools</b></td><td>Reken de formules en voorbeelden uit de cursus na met je eigen getallen.</td></tr>
+      <tr><td><b>Arbeider vs bediende</b></td><td>De verschillen uit de cursus naast elkaar.</td></tr>
+    </table></div>
+  </section>
+
+  <!-- LEARN -->
+  <section id="v-learn" data-v hidden>
+    <div class="learn">
+      <nav class="toc" id="toc" aria-label="Inhoudstafel"></nav>
+      <div style="min-width:0">
+        <div class="toc-mobile"><label class="eyebrow" for="tocsel">Onderdeel</label><select id="tocsel"></select></div>
+        <article class="article" id="article"></article>
+      </div>
+    </div>
+  </section>
+
+  <!-- TERMS -->
+  <section id="v-terms" data-v hidden>
+    <div class="eyebrow">Woordenlijst</div>
+    <h2 style="font-size:2rem;margin:6px 0 8px">Begrippen</h2>
+    <p class="lead">Elk begrip met de omschrijving zoals in de cursus. Klik op de verwijzing om het volledige onderdeel te lezen.</p>
+    <div class="gl-tools">
+      <input id="glq" type="search" placeholder="Filter begrippen…" aria-label="Filter begrippen">
+      <div class="row" id="glchips"></div>
+    </div>
+    <div class="gl-list" id="gllist"></div>
+  </section>
+
+  <!-- FLASH -->
+  <section id="v-flash" data-v hidden>
+    <div class="eyebrow">Oefenen</div>
+    <h2 style="font-size:2rem;margin:6px 0 8px">Flashcards</h2>
+    <p class="lead">Lees het begrip, bedenk de uitleg en draai de kaart om (klik of spatiebalk). Duid daarna aan of je het kende.</p>
+    <div class="row" style="margin-top:14px" id="fcchips"></div>
+    <div class="flash-stage">
+      <button class="card3d" id="card" type="button" aria-label="Kaart omdraaien">
+        <div class="inner">
+          <div class="face front"><div class="eyebrow" id="fcch"></div><h3 id="fcfront"></h3><span class="hint">klik om om te draaien</span></div>
+          <div class="face back" id="fcback"></div>
+        </div>
+      </button>
+    </div>
+    <div class="row" style="justify-content:center">
+      <button class="btn" id="fcprev" type="button">← Vorige</button>
+      <button class="btn" id="fcno" type="button">Nog niet gekend</button>
+      <button class="btn primary" id="fcyes" type="button">Gekend ✓</button>
+      <button class="btn" id="fcnext" type="button">Volgende →</button>
+    </div>
+    <p class="note" style="text-align:center;margin-top:12px" id="fcinfo"></p>
+    <div class="row" style="justify-content:center;margin-top:6px">
+      <button class="btn small" id="fcshuffle" type="button">Schudden</button>
+      <button class="btn small" id="fconly" type="button" aria-pressed="false">Enkel niet-gekende kaarten</button>
+      <button class="btn small" id="fcreset" type="button">Wis mijn “gekend”-markeringen</button>
+    </div>
+  </section>
+
+  <!-- QUIZ -->
+  <section id="v-quiz" data-v hidden>
+    <div class="eyebrow">Zelftest</div>
+    <h2 style="font-size:2rem;margin:6px 0 16px">Quiz</h2>
+    <div id="quizbox"></div>
+  </section>
+
+  <!-- FIGURES -->
+  <section id="v-figures" data-v hidden>
+    <div class="eyebrow">Overzicht</div>
+    <h2 style="font-size:2rem;margin:6px 0 8px">Kerncijfers, termijnen en formulieren</h2>
+    <p class="lead">Alle getallen uit de cursus op één plek. Zet “Verberg de cijfers” aan om jezelf te testen: klik op een kaart om het cijfer te tonen.</p>
+    <div class="row" style="margin:16px 0" id="figchips"></div>
+    <div class="figs" id="figs"></div>
+    <div class="section-h"><h2>Koppelspel</h2><button class="btn small" id="memonew" type="button">Nieuw spel</button></div>
+    <p class="lead">Klik een cijfer en daarna de juiste omschrijving (of omgekeerd). Zes paren per spel.</p>
+    <div class="memo" id="memo"></div>
+    <p class="note" id="memoinfo" style="margin-top:10px"></p>
+  </section>
+
+  <!-- CALC -->
+  <section id="v-calc" data-v hidden>
+    <div class="eyebrow">Toepassen</div>
+    <h2 style="font-size:2rem;margin:6px 0 8px">Rekentools</h2>
+    <p class="lead">Elke tool gebruikt enkel de formule, percentages en grenzen die in de cursus staan. De velden zijn ingevuld met het voorbeeld uit de cursus; pas ze aan om te oefenen.</p>
+    <div class="calcs" id="calcs" style="margin-top:20px"></div>
+  </section>
+
+  <!-- COMPARE -->
+  <section id="v-compare" data-v hidden>
+    <div class="eyebrow">Naast elkaar</div>
+    <h2 style="font-size:2rem;margin:6px 0 8px">Arbeider vs bediende</h2>
+    <p class="lead">De verschillen tussen arbeiders en bedienden zoals ze in de cursus beschreven staan.</p>
+    <div class="tbl-wrap" style="margin-top:20px"><table class="cmp" id="cmp"></table></div>
+  </section>
+
+  <!-- SEARCH -->
+  <section id="v-search" data-v hidden>
+    <div class="eyebrow">Zoekresultaten</div>
+    <h2 style="font-size:1.8rem;margin:6px 0 16px" id="srh"></h2>
+    <div class="sr" id="sr"></div>
+  </section>
+
+  <p class="foot">Bron: cursus <i>Loonadministratie – Jaarlijkse vakantie</i>, VDAB Competentiecentra ©, april 2025. Deze leersite bevat uitsluitend informatie uit dat document. Je voortgang wordt alleen in deze browser bewaard.</p>
+</main>
+
+<script>
+/* =========================================================
+   INHOUD — letterlijk gebaseerd op het cursusdocument
+   ========================================================= */
+const CH = [
+{ id:"h1", nr:"1", title:"Algemeen", page:7,
+  blurb:"Recht op vakantie, vakantiedienstjaar en vakantiejaar, gelijkgestelde dagen, jeugdvakantie, seniorvakantie en Europese aanvullende vakantie.",
+  sections:[
+  { id:"1-0", nr:"1", title:"Inleiding: jaarlijkse vakantie", page:7, html:`
+    <p>De arbeidsovereenkomst wordt <b>geschorst</b> door de dagen jaarlijkse vakantie. In principe heeft iedere werknemer, tewerkgesteld in de privésector, recht op <span class="mk">20 dagen</span>. Het zijn dagen waarop niet gewerkt wordt maar waarvoor de werknemer wel <b>loon en dubbel vakantiegeld</b> ontvangt.</p>
+    <p>De wetgeving betreffende de jaarlijkse vakantie is van toepassing op personen die onderworpen zijn aan de regeling van de jaarlijkse vakantie in het stelsel van de sociale zekerheid voor werknemers.</p>
+    <p>Alle personen die krachtens een arbeidsovereenkomst tewerkgesteld zijn of arbeid verrichten in gelijkaardige omstandigheden, vallen in principe binnen het toepassingsgebied.</p>`},
+  { id:"1-1-1", nr:"1.1.1", title:"Recht op vakantie: principe", page:7, html:`
+    <p>Het recht op vakantie voor de werknemer is een <b>verworven recht</b>, waar niet van afgeweken kan worden. Het is dus bij wet <b>verboden om af te zien</b> van je recht op vakantie.</p>
+    <ul>
+      <li>De vakantiedagen moeten opgenomen worden in het jaar waarin het recht op die vakantiedagen ontstaat. Hiermee wordt bedoeld dat vakantiedagen in principe <b>niet overdraagbaar</b> zijn naar het volgende jaar.</li>
+      <li>Je kan de vakantiedagen, die je zullen worden toegekend in de loop van het volgende jaar, ook <b>niet vroegtijdig opnemen</b>.</li>
+      <li>Van deze vakantiedagen mogen nooit andere “van arbeid vrijgestelde” dagen (bv. feestdagen) afgetrokken worden.</li>
+    </ul>`},
+  { id:"1-1-2", nr:"1.1.2", title:"Opbouw recht op vakantie", page:7, html:`
+    <p>De werknemers die onder het toepassingsgebied vallen van de Jaarlijkse Vakantiewet hebben slechts recht op vakantie <b>in verhouding tot hun dienstprestaties</b>. Het recht op vakantie wordt dus opgebouwd naarmate men presteert.</p>
+    <p>In dit kader zijn 2 begrippen relevant:</p>
+    <ul>
+      <li><b>Het vakantiedienstjaar</b>, zijnde het jaar waarin arbeid wordt gepresteerd en dat recht geeft op dagen vakantie en vakantiegeld.</li>
+      <li><b>Het vakantiejaar</b>, zijnde het jaar waarin door de gerechtigde vakantie genomen wordt, zijnde het jaar na het vakantiedienstjaar.</li>
+    </ul>
+    <div class="box ex"><span class="bt">Voorbeeld</span>Dus vakantiedienstjaar 2024, vakantiejaar 2025.</div>
+    <p>Een vakantiejaar en een vakantiedienstjaar omvatten steeds een <b>kalenderjaar van 01/01 tot en met 31/12</b>.</p>
+    <p>Elk kalenderjaar is op zijn beurt zowel een vakantiejaar als een vakantiedienstjaar; bijvoorbeeld vakantiedienstjaar 2024/vakantiejaar 2025, vakantiedienstjaar 2025/vakantiejaar 2026.</p>
+    <div class="widget"><span class="bt">Probeer het zelf</span>
+      <div class="fields" style="max-width:420px"><div class="field"><label for="yr">Kalenderjaar</label><input id="yr" type="number" value="2025" min="1990" max="2100"></div></div>
+      <p id="yrout" style="margin:12px 0 0"></p>
+    </div>
+    <p>Om recht te hebben op een <b>volledige vakantie</b>, moet de werknemer in het vakantiedienstjaar een <b>volledig jaar</b> gewerkt hebben. Als dit niet het geval is, zal de werknemer recht hebben op slechts een gedeeltelijke vakantie. Uitzonderingen hierop zijn de <b>jeugdvakantie</b> en de <b>seniorvakantie</b>.</p>`},
+  { id:"1-1-3", nr:"1.1.3", title:"Gelijkgestelde dagen", page:7, html:`
+    <p>Niet alleen effectief gewerkte dagen komen in aanmerking voor de berekening van de vakantieduur. Er worden ook heel wat <b>inactiviteitsdagen met effectief gewerkte dagen gelijkgesteld</b>.</p>
+    <p>Het gaat over onder andere volgende oorzaken:</p>
+    <ul>
+      <li>Jaarlijkse vakantie: wettelijke vakantiedagen, jeugd- en seniorvakantiedagen en aanvullende (Europese) vakantiedagen.</li>
+      <li>De eerste <span class="mk">12 maanden</span> van ziekte of ongeval van gemeen recht.</li>
+      <li>Daggedeelte in geval van gedeeltelijke werkhervatting na ziekte, ongeval, arbeidsongeval of beroepsziekte.</li>
+      <li>Volledige periode van tijdelijke arbeidsongeschiktheid wegens arbeidsongeval of beroepsziekte (periode van de eerste 12 maanden bij gedeeltelijke ongeschiktheid van minimum <span class="mk">66 %</span>)</li>
+      <li>Zwangerschapsrust</li>
+      <li>Klein verlet</li>
+      <li>Vaderschapsverlof</li>
+      <li>Adoptieverlof</li>
+      <li>Pleegzorgverlof</li>
+      <li>Betaald educatief verlof/Vlaams opleidingsverlof</li>
+      <li>Staking</li>
+      <li>Lock-out</li>
+      <li>Tijdelijke werkloosheid om economische redenen</li>
+    </ul>
+    <p>De regeling van gelijkgestelde dagen is grotendeels gelijklopend voor arbeiders en bedienden. Een volledige lijst van gelijkgestelde dagen kan je vinden op www.socialezekerheid.be – Burgers – Verlof en vakantie.</p>
+    <div class="box no"><span class="bt">Zijn NIET gelijkgesteld</span>
+      <ul style="margin:0">
+        <li>Familiaal verlof of verlof om dringende redenen;</li>
+        <li>Technische stoornis of weerverlet;</li>
+        <li>Volledige schorsing wegens loopbaanonderbreking of tijdskrediet;</li>
+        <li>Periodes van verbrekingsvergoeding (= niet gepresteerde opzeggingstermijn);</li>
+        <li>Periodes van thematische verloven (ouderschapsverlof, palliatief verlof, verlof verzorging zwaar ziek familielid (= zorgverlof));</li>
+        <li>Ongerechtvaardigde afwezigheden.</li>
+      </ul>
+    </div>
+    <div class="widget"><span class="bt">Sorteeroefening: gelijkgesteld of niet?</span>
+      <p style="margin:0 0 10px" id="sortq"></p>
+      <div class="row"><button class="btn small" id="sortyes" type="button">Gelijkgesteld</button><button class="btn small" id="sortno" type="button">Niet gelijkgesteld</button><span class="note" id="sortscore"></span></div>
+      <p id="sortfb" style="margin:10px 0 0;font-size:.92rem"></p>
+    </div>`},
+  { id:"1-2-1", nr:"1.2.1", title:"Jeugdvakantie: begrip", page:9, html:`
+    <p>Het aantal weken betaalde vakantie in het vakantiejaar hangt dus af van de tewerkstellingsduur in het vorige jaar (vakantiedienstjaar). Wie het ganse jaar heeft gewerkt, heeft in het daaropvolgende jaar recht op <b>4 weken</b> betaalde vakantie.</p>
+    <div class="box ex"><span class="bt">Voorbeeld</span>Een jongere die afstudeert in juni van het vakantiedienstjaar en aan het werk gaat als bediende vanaf 1 oktober heeft in het vakantiedienstjaar slechts drie maanden gewerkt en heeft in het vakantiejaar slechts <b>5 dagen</b> betaalde vakantie.</div>
+    <p>De regeling van de jeugdvakantie voorziet dat de pas afgestudeerde jongere <b>ter aanvulling</b> van zijn onvolledig aantal betaalde vakantiedagen, jeugdvakantie mag nemen. Voor deze jeugdvakantiedagen kan een <b>jeugdvakantie-uitkering</b> betaald worden ten laste van de werkloosheidsverzekering (dus vergoed door de <b>RVA</b>).</p>`},
+  { id:"1-2-2", nr:"1.2.2", title:"Jeugdvakantie: voorwaarden", page:9, html:`
+    <p>Om recht te hebben op jeugdvakantiedagen moet de jongere aan volgende voorwaarden voldoen:</p>
+    <ul>
+      <li>op <b>31/12 van het vakantiedienstjaar</b> de leeftijd van <span class="mk">25 jaar</span> niet bereikt hebben;</li>
+      <li>in de loop van het vakantiedienstjaar zijn <b>studies</b> (met inbegrip van de periode van het eindwerk) hebben beëindigd. Onder studies wordt eveneens verstaan:
+        <ul>
+          <li>(Overeenkomst van) Alternerende opleiding;</li>
+          <li>Vorming erkend in het kader van deeltijdse leerplicht;</li>
+          <li>opleidingen of vormingen erkend in het kader van de deeltijdse leerplicht door de VDAB, BGDA, FOREM of ADG (in het kader van het inschakelingsparcours).</li>
+        </ul></li>
+      <li>na de beëindiging van de studies, leertijd of vorming, in de loop van het vakantiedienstjaar gewerkt hebben als loontrekkende gedurende een minimumperiode. De jongere moet gedurende ten minste <span class="mk">één maand</span> verbonden zijn door één of meerdere arbeidsovereenkomsten en deze tewerkstelling moet ten minste <span class="mk">13 effectieve of gelijkgestelde dagen</span> of ten minste <span class="mk">70 arbeidsuren</span> of gelijkgestelde uren omvatten. Een tewerkstelling met de vakantieregeling “openbare dienst” of met een uitgestelde bezoldiging (onderwijs) en een alternerende opleiding of deeltijds onderwijs tellen echter niet mee.</li>
+      <li>de regeling geldt voor <b>arbeiders en bedienden</b></li>
+      <li>de jeugdvakantie is een <b>recht en geen verplichting</b></li>
+      <li>ook een jongere die <b>deeltijds</b> is tewerkgesteld heeft recht op jeugdvakantiedagen</li>
+      <li>een jongere die is tewerkgesteld in een <b>activeringsprogramma</b> en geniet van de vakantieregeling voor de “privésector” heeft eveneens recht op jeugdvakantiedagen.</li>
+    </ul>
+    <div class="widget"><span class="bt">Checklist: komt deze jongere in aanmerking?</span>
+      <div style="display:grid;gap:6px" id="jvcheck">
+        <label><input type="checkbox"> Jonger dan 25 jaar op 31/12 van het vakantiedienstjaar</label>
+        <label><input type="checkbox"> Studies (of alternerende opleiding / erkende vorming) beëindigd in de loop van het vakantiedienstjaar</label>
+        <label><input type="checkbox"> Daarna minstens één maand verbonden door één of meerdere arbeidsovereenkomsten</label>
+        <label><input type="checkbox"> Die tewerkstelling omvat minstens 13 effectieve of gelijkgestelde dagen of minstens 70 arbeidsuren of gelijkgestelde uren</label>
+      </div>
+      <p id="jvout" style="margin:10px 0 0;font-weight:600"></p>
+    </div>`},
+  { id:"1-2-3", nr:"1.2.3", title:"Jeugdvakantie: hoe opnemen?", page:10, html:`
+    <p>Indien de jongere aan de voorwaarden voldoet heeft hij recht op een aantal aanvullende vakantiedagen met een <b>maximum van 4 weken</b>, te verminderen met de wettelijke vakantiedagen waarop hij in overeenstemming met de vakantiewetgeving recht heeft.</p>
+    <ul>
+      <li>De jongere moet <b>eerst zijn gewone vakantiedagen</b> opnemen, dit kan:
+        <ul>
+          <li>tijdens zijn tewerkstelling als loontrekkende,</li>
+          <li>aansluitend op een dergelijke tewerkstelling,</li>
+          <li>tijdens een periode van vergoede volledige werkloosheid.</li>
+        </ul></li>
+      <li>De jeugdvakantie kan <b>alleen</b> worden opgenomen tijdens een tewerkstelling als loontrekkende.</li>
+      <li>De jongere mag bovendien tijdens één van de vorige kalenderjaren <b>niet</b> voldaan hebben aan de voorwaarden voor het verkrijgen van een jeugdvakantie-uitkering.</li>
+    </ul>`},
+  { id:"1-2-4", nr:"1.2.4", title:"Jeugdvakantie: uitkering", page:10, html:`
+    <p>Voor het verkrijgen van een jeugdvakantie-uitkering mag de jongere <b>geen beroeps- of ander vervangingsinkomen</b> genieten. De uitkering bedraagt <span class="mk">65 %</span> van het brutoloon van de jongere tijdens de eerste maand waarin de jeugdvakantie wordt genomen en is begrensd tot <span class="mk">€ 2 837,89 per maand</span>.</p>
+    <div class="formula">€ 2 837,89 / 26 × 65 % = € 70,95</div>
+    <p>Het maximumbedrag is dus gelijk aan <span class="mk">€ 70,95</span> (= 2 837,89/26 × 65 %) gerekend in de <b>zesdagenweek</b>. Op dit bedrag wordt een fiscale voorheffing ingehouden van <span class="mk">10,09 %</span>.</p>
+    <p>Voor de (halve) jeugdvakantiedagen kan de jongere geen beroeps- of vervangingsinkomen ontvangen.</p>`},
+  { id:"1-2-5", nr:"1.2.5", title:"Jeugdvakantie: procedure", page:10, html:`
+    <ol>
+      <li>Na de <b>eerste maand</b> met jeugdvakantie dient de jongere een aanvraag in bij de <b>vakbond</b> of bij de <b>openbare hulpkas</b> voor werkloosheidsuitkeringen. Deze aanvraag gebeurt met het formulier <span class="mk">C103 Jeugdvakantie werknemer</span> dat de jongere zelf invult.</li>
+      <li>De aanvraag wordt door de uitbetalingsinstelling overgemaakt aan de <b>RVA</b>. De aanvraag moet ten laatste in <b>februari</b> van het jaar volgend op het jaar waarin vakantie wordt genomen bij de RVA toekomen.</li>
+      <li>De werkgever doet een elektronische aangifte (<span class="mk">aangifte scenario 9</span>). Een print van deze elektronische aangifte wordt aan de jongere bezorgd.</li>
+      <li>Voor elke volgende maand waarin de jongere jeugdvakantie opneemt moet de werkgever een elektronische aangifte doen van het aantal uren jeugdvakantie (<span class="mk">aangifte scenario 10</span>). De werkgever bezorgt de jongere hiervan een print.</li>
+      <li>De betaling van de jeugdvakantie-uitkeringen gebeurt op basis van deze elektronische aangiftes.</li>
+    </ol>`},
+  { id:"1-3-1", nr:"1.3.1", title:"Seniorvakantie: begrip", page:11, html:`
+    <p>Omdat een werknemer zijn recht op jaarlijkse vakantie opbouwt door zijn tewerkstelling in het vakantiedienstjaar, is het mogelijk dat (oudere) werknemers die na een lange inactiviteitsperiode het werk hervatten, in dit vakantiedienstjaar onvoldoende dagen gepresteerd hebben om in het vakantiejaar recht te hebben op de volledige vier weken vakantie. Dit zou een struikelblok kunnen zijn voor ouderen om zich opnieuw in het arbeidsproces in te schakelen.</p>
+    <p>De <b>wet van 23 december 2005 betreffende het generatiepact</b> heeft daarom een nieuwe regeling uitgewerkt waarbij <span class="mk">50-plussers</span>, die het werk hervatten en in het vakantiejaar geen recht hebben op de volledige vier weken vakantie, seniorvakantiedagen worden toegekend.</p>
+    <p>Dit betekent dat oudere werknemers, <b>bovenop</b> de gewone vakantiedagen waarop ze eventueel recht hebben, recht hebben op seniorvakantiedagen met een bijhorende <b>seniorvakantie-uitkering ten laste van de RVA</b>.</p>`},
+  { id:"1-3-2", nr:"1.3.2", title:"Seniorvakantie: voorwaarden", page:11, html:`
+    <p>De oudere werknemers moeten aan de volgende voorwaarden voldoen:</p>
+    <ul>
+      <li>werknemers zijn in loondienst en vallen onder het toepassingsgebied van de vakantiewetgeving;</li>
+      <li>met een arbeidsovereenkomst tewerkgesteld zijn (als arbeider of bediende);</li>
+      <li>op <b>31 december van het vakantiedienstjaar</b> minstens <span class="mk">50 jaar</span> zijn;</li>
+      <li>in het vakantiedienstjaar <b>volledig werkloos of invalide</b> geweest zijn en om die reden geen recht hebben op de volledige vier weken betaalde vakantie.</li>
+    </ul>`},
+  { id:"1-3-3", nr:"1.3.3", title:"Seniorvakantie: hoe opnemen?", page:11, html:`
+    <ul>
+      <li>De seniorvakantie kan enkel <b>na uitputting van de gewone betaalde vakantie</b> worden opgenomen.</li>
+      <li>De seniorvakantie kan enkel opgenomen worden <b>tijdens de arbeidsovereenkomst</b>. Zodra de oudere werknemer werkloos is of een ander statuut heeft dan loontrekkende kan hij geen beroep meer doen op de seniorvakantiedagen.</li>
+    </ul>`},
+  { id:"1-3-4", nr:"1.3.4", title:"Seniorvakantie: uitkering", page:11, html:`
+    <p>De werknemer geniet voor elke dag bijkomende vakantie een seniorvakantie-uitkering <b>ten laste van de RVA</b>. Deze uitkering wordt beschouwd als een <b>werkloosheidsuitkering</b>; de oudere werknemer mag tijdens de seniorvakantie daarom geen beroeps- of ander vervangingsinkomen genieten.</p>
+    <p>De seniorvakantie-uitkering bedraagt <span class="mk">65 %</span> van het <b>gemiddelde dagloon</b> waarop de werknemer normaal recht zou hebben gehad op het tijdstip waarop hij in het vakantiejaar voor het eerst seniorvakantiedagen neemt. Het in acht genomen loon is echter begrensd tot <span class="mk">€ 2 837,89 per maand</span>.</p>
+    <div class="formula">€ 2 837,89 / 26 × 65 % = € 70,95</div>
+    <p>De daguitkering bedraagt daardoor ook maximum <span class="mk">€ 70,95</span> (= 2 837,89/26 × 65 %), gerekend in de zesdagenweek. Op dit bedrag wordt een fiscale voorheffing ingehouden van <span class="mk">10,09 %</span>.</p>`},
+  { id:"1-3-5", nr:"1.3.5", title:"Seniorvakantie: procedure", page:12, html:`
+    <ol>
+      <li>Na de <b>eerste maand</b> met seniorvakantie dient de senior een aanvraag in bij de <b>vakbond</b> of bij de <b>openbare hulpkas</b> voor werkloosheidsuitkeringen. Deze aanvraag gebeurt met het formulier <span class="mk">C103 Seniorvakantie werknemer</span> dat de senior zelf invult.</li>
+      <li>De aanvraag wordt door de uitbetalingsinstelling overgemaakt aan de <b>RVA</b>. De aanvraag moet ten laatste in <b>februari</b> van het jaar volgend op het jaar waarin vakantie wordt genomen bij de RVA toekomen.</li>
+      <li>De werkgever doet een elektronische aangifte (<span class="mk">aangifte scenario 9</span>). Een print van deze elektronische aangifte wordt aan de senior bezorgd.</li>
+      <li>Voor elke volgende maand waarin er seniorvakantie wordt opgenomen, moet de werkgever een elektronische aangifte doen van het aantal uren seniorvakantie (<span class="mk">aangifte scenario 10</span>). De werkgever bezorgt de senior hiervan een print.</li>
+      <li>De betaling van de seniorvakantie-uitkeringen gebeurt op basis van deze elektronische aangiftes.</li>
+    </ol>
+    <div class="box ex"><span class="bt">Vergelijk</span>
+      <div class="tbl-wrap" style="margin:6px 0 0;background:var(--sheet)"><table>
+        <tr><th></th><th>Jeugdvakantie</th><th>Seniorvakantie</th></tr>
+        <tr><td>Leeftijd op 31/12 vakantiedienstjaar</td><td>25 jaar niet bereikt</td><td>minstens 50 jaar</td></tr>
+        <tr><td>Situatie in vakantiedienstjaar</td><td>studies beëindigd + minimumperiode gewerkt</td><td>volledig werkloos of invalide geweest</td></tr>
+        <tr><td>Opname</td><td>na de gewone vakantiedagen, enkel tijdens tewerkstelling als loontrekkende</td><td>na uitputting van de gewone vakantie, enkel tijdens de arbeidsovereenkomst</td></tr>
+        <tr><td>Uitkering</td><td colspan="2">65 %, loon begrensd tot € 2 837,89/maand → max. € 70,95/dag (zesdagenweek), 10,09 % fiscale voorheffing, ten laste van de RVA</td></tr>
+        <tr><td>Formulier</td><td>C103 Jeugdvakantie werknemer</td><td>C103 Seniorvakantie werknemer</td></tr>
+        <tr><td>Aangifte werkgever</td><td colspan="2">scenario 9 (eerste maand), scenario 10 (elke volgende maand)</td></tr>
+      </table></div>
+    </div>`},
+  { id:"1-4-1", nr:"1.4.1", title:"Europese aanvullende vakantie: begrip", page:12, html:`
+    <p>De Europese aanvullende vakantie is een feit sinds de publicatie in het Belgisch Staatsblad van <span class="mk">28/06/2012</span>. Tot deze publicatie hadden we 1 regeling rond de opbouw van de jaarlijkse vakantie, namelijk de duur van de vakantie wordt bepaald volgens het aantal dagen tewerkstelling (en de gelijkgestelde dagen) in het voorafgaande jaar.</p>
+    <p>Vanaf <span class="mk">1 april 2012</span> is daar de “Europese aanvullende vakantie” bijgekomen. De aanvullende vakantie is een systeem dat <b>gefinancierd wordt door de werknemer zelf</b>, door middel van een <b>voorafname op het dubbel vakantiegeld van het volgende jaar</b>.</p>`},
+  { id:"1-4-2", nr:"1.4.2", title:"Europese aanvullende vakantie: voorwaarden", page:12, html:`
+    <p>Het KB bepaalt dat werknemers, die vallen onder de jaarlijkse vakantieregeling in de privésector, van deze aanvullende vakantie kunnen genieten op voorwaarde dat:</p>
+    <ul>
+      <li>Zij een activiteit in dienst van één of meerdere werkgevers <b>aanvatten of hervatten</b></li>
+      <li>Zij in het kalenderjaar van hervatting of aanvatting van de activiteiten, werkelijke arbeidsprestaties hebben verricht of een met arbeid gelijkgestelde onderbreking hebben gehad tijdens ten minste <span class="mk">3 maanden</span>, al dan niet doorlopend bij één of meerdere werkgevers (= <b>aanloopperiode</b>)</li>
+      <li>De wettelijke vakantiedagen zoals bedoeld in de huidige vakantieregeling zijn <b>opgebruikt</b> (de werknemer heeft geen gewone vakantiedagen meer over op basis van de prestaties van het voorgaand jaar of kan niet genieten van junior- of seniorvakantie).</li>
+    </ul>
+    <p>Het gaat om een <b>recht op vakantie</b>, dit betekent dat de werknemer niet verplicht is om deze aanvullende vakantie op te nemen. Zowel voor arbeiders als voor bedienden wordt het systeem gefinancierd door de werknemer zelf, d.m.v. prefinanciering met het dubbel vakantiegeld van het volgende jaar. Omdat het aanvullende vakantiegeld wordt gefinancierd met het gewone dubbel vakantiegeld, wordt het <b>niet als loon beschouwd</b> en dus zal de werknemer daarvoor <b>solidariteitsbijdragen</b> moeten betalen.</p>
+    <h4>Aanvatten van een activiteit</h4>
+    <p>Onder het aanvatten van een activiteit verstaat men het starten van een activiteit na een activiteit die <b>nooit geheel of gedeeltelijk onderworpen</b> is geweest aan de jaarlijkse vakantieregeling in de privésector: zelfstandige activiteit, activiteit in het buitenland, activiteiten in de publieke sector (= ambtenaren), veranderen van arbeidsstelsel zonder hun activiteit te onderbreken, bijvoorbeeld van deeltijds naar voltijds.</p>
+    <div class="box ex"><span class="bt">Voorbeeld aanvatten</span>Jan is werkloos van 1 januari 2024 tot en met 31 maart 2025 na een zelfstandige activiteit en start op 1 april 2025 bij een werkgever. Jan is in 2024 niet onderworpen geweest aan de wettelijke vakantieregeling. In 2025 <b>vat</b> Jan een activiteit <b>aan</b>.</div>
+    <h4>Hervatten van een activiteit</h4>
+    <p>Hieronder verstaat men het opnieuw beginnen met een activiteit nadat de werknemer:</p>
+    <ul>
+      <li>Werkloos was (niet verbonden met een arbeidsovereenkomst);</li>
+      <li>Arbeidsongeschikt was;</li>
+      <li>Onder de wapens geroepen was;</li>
+      <li>In loopbaanonderbreking was;</li>
+      <li>In voltijds tijdskrediet was;</li>
+      <li>Einde contract was;</li>
+      <li>Verlof zonder wedde had opgenomen.</li>
+    </ul>
+    <div class="box ex"><span class="bt">Voorbeeld hervatten</span>Jan werkt van 1 januari 2024 tot en met 30 juni 2024. Hij is volledig werkloos van 1 juli 2024 tot en met 30 juni 2025. Hij treedt in dienst bij de nieuwe werkgever op 1 juli 2025. Hij heeft in 2024 6 maanden gewerkt en is dus gedeeltelijk onderworpen aan de vakantiereglementering. In 2025 <b>hervat</b> Jan een activiteit.</div>`},
+  { id:"1-4-3", nr:"1.4.3", title:"Europese aanvullende vakantie: collectieve sluiting", page:13, html:`
+    <p>De werknemer is <b>niet verplicht</b> zijn aanvullende vakantiedagen te gebruiken om de collectieve sluiting van de onderneming wegens jaarlijkse vakantie te overbruggen. Hij kan nog steeds zoals vroeger het geval was, <b>uitkeringen van de RVA</b> ontvangen ten gevolge van tijdelijke werkloosheid door sluiting van de onderneming wegens jaarlijkse vakantie.</p>
+    <div class="box warn"><span class="bt">Let op</span>In het geval van <b>jeugdvakantie en seniorvakantie</b> kan men niet opteren voor dit systeem en gaat de werknemer zijn vakantiedagen moeten gebruiken in het collectief verlof.</div>`}
+  ]},
+{ id:"h2", nr:"2", title:"Aantal vakantiedagen", page:14,
+  blurb:"Berekening voor arbeiders (formule + tabel) en bedienden (2 dagen per maand), aanvullende vakantie en de regels voor de opname van vakantiedagen.",
+  sections:[
+  { id:"2-0", nr:"2", title:"Inleiding: aantal vakantiedagen", page:14, html:`
+    <p>Het aantal wettelijke vakantiedagen waarop een werknemer recht heeft bij een voltijdse of deeltijdse tewerkstelling is steeds beperkt tot <span class="mk">4 vakantieweken</span> in het arbeidsstelsel waarin de werknemer werkt <b>op het ogenblik dat hij vakantie neemt</b>.</p>
+    <p>Het spreekt voor zich dat <b>conventioneel</b> meer vakantiedagen kunnen worden toegekend dan de wettelijk voorziene minima.</p>`},
+  { id:"2-1-1", nr:"2.1.1", title:"Arbeiders: berekening", page:14, html:`
+    <p>De duur van de vakantie van iedere arbeider is afhankelijk van het aantal gewerkte dagen of gelijkgestelde dagen in het vakantiedienstjaar.</p>
+    <p>Het is de <b>vakantiekas</b> die het aantal vakantiedagen voor arbeiders zal berekenen. Er wordt ook rekening gehouden met hun arbeidsstelsel. Het is dan ook aan de <b>werkgever</b> om dit aantal vakantiedagen aan te passen aan het arbeidsstelsel van de arbeider op het ogenblik dat de vakantie effectief opgenomen wordt.</p>
+    <p>De duur van de wettelijke vakantie wordt vastgesteld aan de hand van de hierna vermelde formule en tabel in verhouding tot het aantal gepresteerde en/of gelijkgestelde dagen.</p>
+    <h4>Stap 1: Formule</h4>
+    <p>Voor elke tewerkstellingssituatie tijdens het vakantiedienstjaar wordt het totaal aantal normale werkelijke arbeidsdagen en de in aanmerking genomen inactiviteitsdagen samengeteld en omgezet in het standaardstelsel van de <b>vijfdagenweek</b>. Het bekomen aantal wordt daarna vermenigvuldigd met de <b>tewerkstellingsbreuk</b> van de werknemer volgens de volgende formule:</p>
+    <div class="formula">A × 5/R × Q/S</div>
+    <div class="tbl-wrap"><table>
+      <tr><th>Letter</th><th>Betekenis</th></tr>
+      <tr><td class="mono"><b>A</b></td><td>het totaal aantal effectief gepresteerde en gelijkgestelde dagen</td></tr>
+      <tr><td class="mono"><b>R</b></td><td>het gemiddeld aantal dagen per week waarin de werknemer geacht wordt te werken op basis van zijn contract</td></tr>
+      <tr><td class="mono"><b>Q</b></td><td>het gemiddeld aantal uren per week waarin de werknemer geacht wordt te werken op basis van zijn contract</td></tr>
+      <tr><td class="mono"><b>S</b></td><td>het gemiddeld aantal uren per week waarin een voltijdse werknemer geacht wordt te werken</td></tr>
+    </table></div>
+    <p>Het resultaat van deze berekening is een getal met <b>2 decimalen</b>. Er wordt geen rekening gehouden met decimalen die kleiner zijn dan 50. Wanneer de decimalen groter zijn dan of gelijk zijn aan 50 wordt er afgerond naar de hogere eenheid.</p>
+    <h4>Stap 2: Tabel aantal vakantiedagen</h4>
+    <p>Vervolgens wordt het bekomen resultaat vergeleken met onderstaande tabel. Het betreft een aantal dagen omgezet naar het voltijds vijfdagenweekstelsel.</p>
+    <div class="tbl-wrap"><table id="daytable"></table></div>
+    <div class="widget"><span class="bt">Zoek op in de tabel</span>
+      <div class="fields" style="max-width:420px"><div class="field"><label for="tlk">Aantal gepresteerde + gelijkgestelde dagen (na stap 1)</label><input id="tlk" type="number" min="0" value="115"></div></div>
+      <p id="tlkout" style="margin:10px 0 0"></p>
+    </div>`},
+  { id:"2-1-2", nr:"2.1.2", title:"Arbeiders: voorbeeld", page:16, html:`
+    <div class="box ex"><span class="bt">Voorbeeld</span>Een arbeider komt in dienst bij een werkgever op 1 augustus 200(x). Hij heeft daarvoor nog niet gewerkt. In totaal presteerde hij in 200(x) <b>125 arbeidsdagen</b>. Hij werkt <b>4 dagen per week</b> in een arbeidsweek van <b>28 uur</b>. In het bedrijf is een <b>38-uren werkweek</b> van kracht.</div>
+    <p><b>Stap 1:</b> De formule is als volgt: <span class="mono">125 × 5/4 × 28/38 = 115,13</span>. Afgerond geeft dit <b>115 dagen</b>.</p>
+    <p><b>Stap 2:</b> Volgens de tabel komen 115 arbeidsdagen overeen met <span class="mk">9 vakantiedagen</span>. Deze vakantie kan opgenomen worden in 200(x+1).</p>
+    <p class="note">Reken dit voorbeeld zelf na in de <button class="btn small" data-go="calc" type="button">Rekentools</button></p>`},
+  { id:"2-1-3", nr:"2.1.3", title:"Aanvullende vakantie voor arbeiders", page:16, html:`
+    <p>Na de <b>aanloopperiode van 3 maanden</b> zal het aantal vakantiedagen worden bepaald volgens het aantal effectief gewerkte en gelijkgestelde dagen <b>tijdens het lopende jaar</b>. Deze verworven vakantiedagen zullen worden verminderd met de gewone vakantiedagen waar de arbeider recht op heeft op basis van zijn prestaties in het voorgaande jaar. Het (positieve) verschil zijn de aanvullende “Europese” vakantiedagen.</p>
+    <div class="box ex"><span class="bt">Voorbeeld 1: een arbeider start op 1 oktober 2024</span>
+      <div class="tl"><div class="tl-year"><span class="wl">WL</span><span class="wl">WL</span><span class="wl">WL</span><span>W</span><b>2024</b></div><div class="tl-year"><span>W</span><span>W</span><span>W</span><span>W</span><b>2025</b></div></div>
+      <p>In 2025 zal hij recht hebben op 5 dagen betaalde (wettelijke) vakantie. Bij opname van zijn vakantie in juli 2025 (heeft ongeveer 125 dagen gewerkt in 2025) zal hij 2 weken (10 dagen in het 5-dagenstelsel) aanvullende vakantie kunnen opnemen:</p>
+      <ul><li>1 week wettelijke vakantie, opgebouwd in 2024</li><li>1 week aanvullende vakantie op basis van gepresteerde dagen in 2025</li></ul>
+      <p style="margin:0">In de maanden die volgen kan (het is een recht, geen plicht) hij vervolgens meer aanvullende dagen verkrijgen volgens zijn gepresteerde en gelijkgestelde dagen.</p>
+    </div>
+    <div class="box ex"><span class="bt">Voorbeeld 2: een arbeider start op 1 april 2025. Hij heeft niet gewerkt in 2024</span>
+      <div class="tl"><div class="tl-year"><span class="wl">WL</span><span class="wl">WL</span><span class="wl">WL</span><span class="wl">WL</span><b>2024</b></div><div class="tl-year"><span class="wl">WL</span><span>W</span><span>W</span><span>W</span><b>2025</b></div></div>
+      <p style="margin:0">Hij zal in augustus 2025, wanneer hij zijn vakantie opneemt, recht hebben op <b>8 dagen</b> (5-dagenstelsel, zie tabel) aanvullende vakantie (hij heeft geen wettelijke vakantiedagen opgebouwd in 2024 en heeft ongeveer 100 dagen gewerkt in 2025). Hij kan deze opnemen vanaf de <b>laatste week van juni</b> (= de laatste week van de aanloopperiode). Ook hier kan de arbeider later in het jaar meer dagen verkrijgen.</p>
+    </div>
+    <p>Volgende dagen van afwezigheid worden <b>gelijkgesteld</b> voor de berekening van de duur van de aanvullende vakantie:</p>
+    <ul>
+      <li>de normale gelijkstellingen zoals bij het gewone verlof (bv. ziekte, ongeval, moederschapsrust, …);</li>
+      <li>de gewone vakantiedagen;</li>
+      <li>de aanvullende dagen vakantie.</li>
+    </ul>`},
+  { id:"2-2-1", nr:"2.2.1", title:"Bedienden: berekening", page:17, html:`
+    <p>Voor bedienden wordt het aantal vakantiedagen bepaald door de <b>werkgever</b> in functie van het aantal <b>gewerkte maanden</b> in het vakantiedienstjaar voor één of meerdere werkgevers.</p>
+    <p>In een <b>6-dagenweek</b> wordt de vakantieduur vastgesteld op <span class="mk">2 dagen per maand</span> arbeid of met arbeid gelijkgestelde onderbreking. De omrekening naar een vijfdagenstelsel gebeurt door <b>per schijf van 6 vakantiedagen 1 dag in mindering</b> te brengen. De maximale vakantieduur bedraagt dus <span class="mk">24 dagen</span> in de 6-dagenweek en <span class="mk">20 dagen</span> in de 5-dagenweek.</p>
+    <p>De werkgever is niet verplicht rekening te houden met prestaties van minder dan één volledige maand. De bediende heeft wel het recht, indien hij verschillende malen een gedeelte van een maand gepresteerd heeft, om deze gedeeltes samen te voegen tot één of meerdere volledige maanden. In de praktijk wordt een halve maand of meer, als een volledige maand beschouwd, terwijl prestaties van minder dan een halve maand verwaarloosd worden. Dit is echter een <b>gunst van de werkgever</b>.</p>`},
+  { id:"2-2-2", nr:"2.2.2", title:"Bedienden: voorbeeld", page:17, html:`
+    <div class="box ex"><span class="bt">Voorbeeld</span>Een bediende werkt <b>5 maanden</b> in het vakantiedienstjaar in het vijfdagenstelsel. Op hoeveel dagen vakantie heeft hij recht in het vakantiejaar?</div>
+    <p>Hij werkt 5 maanden. In een zesdagenstelsel zou hij recht hebben op <span class="mono">5 × 2 = 10</span> vakantiedagen. Per schijf van 6 dagen moeten we 1 dag in mindering brengen. Bijgevolg heeft de bediende recht op <span class="mono">10 − 1</span> = <span class="mk">9 vakantiedagen</span>.</p>
+    <div class="widget"><span class="bt">Probeer het zelf</span>
+      <div class="fields" style="max-width:420px"><div class="field"><label for="bdm">Gewerkte maanden in het vakantiedienstjaar</label><input id="bdm" type="number" min="0" max="12" value="5"></div></div>
+      <p id="bdmout" style="margin:10px 0 0"></p>
+    </div>`},
+  { id:"2-2-3", nr:"2.2.3", title:"Aanvullende vakantie voor bedienden", page:17, html:`
+    <p>Vanaf de <b>laatste week van de aanloopperiode van 3 maanden</b>, heeft de bediende die voldoet aan de voorwaarden recht op maximum <span class="mk">6 vakantiedagen</span> in een arbeidsstelsel van 6 dagen per week. Indien hij tewerkgesteld is in een ander stelsel, dan zal hij recht hebben op vakantiedagen in verhouding tot zijn arbeidsstelsel tijdens zijn aanloopperiode. In een vijfdagenstelsel heeft de bediende bijgevolg recht op <span class="mono">6 × 5/6</span> = <span class="mk">5 dagen</span> aanvullende vakantie.</p>
+    <p>Na deze aanloopperiode wordt de vakantieduur bepaald naar rato van <b>2 dagen per maand</b> te hebben gewerkt bij één of meerdere werkgevers indien de bediende is tewerkgesteld in een zes-dagenstelsel (indien een ander stelsel, heeft hij recht op de vakantiedagen naar verhouding van zijn arbeidsstelsel).</p>
+    <p>Worden ook beschouwd als gewerkte dagen:</p>
+    <ul>
+      <li>De dagen waarop de arbeidsovereenkomst al geschorst is (dezelfde gelijkstellingen als in de normale regeling, bv. ziekte, ongeval, moederschapsrust, …);</li>
+      <li>De wettelijke vakantiedagen alsook de aanvullende vakantiedagen.</li>
+    </ul>
+    <div class="box ex"><span class="bt">Voorbeeld: een bediende is werkloos van 1 januari 2024 tot en met 31 maart 2025 en start op 1 april voltijds bij een werkgever</span>
+      <div class="tl"><div class="tl-year"><span class="wl">WL</span><span class="wl">WL</span><span class="wl">WL</span><span class="wl">WL</span><b>2024</b></div><div class="tl-year"><span class="wl">WL</span><span>W</span><span>W</span><span>W</span><b>2025</b></div></div>
+      <p>In december 2025 zal hij 9 maanden gewerkt hebben en heeft bijgevolg recht op <b>15 dagen</b> aanvullende vakantie.</p>
+      <p>Aanloopperiode van 3 maanden (01/04/2025 – 30/06/2025) geeft recht op 5 dagen aanvullende vakantie. Per gewerkte maand bouwt de werknemer 2 dagen aanvullende vakantie op:</p>
+      <div class="tbl-wrap" style="background:var(--sheet);max-width:420px"><table id="bdtl">
+        <tr><th>Maand</th><th class="num">Opbouw</th><th class="num">Totaal</th></tr>
+        <tr><td>april – mei – juni</td><td class="num">5 dagen</td><td class="num">5 dagen</td></tr>
+        <tr><td>juli</td><td class="num">+2 dagen</td><td class="num">7 dagen</td></tr>
+        <tr><td>augustus</td><td class="num">+2 dagen</td><td class="num">9 dagen</td></tr>
+        <tr><td>september</td><td class="num">+2 dagen</td><td class="num">11 dagen</td></tr>
+        <tr><td>oktober</td><td class="num">+2 dagen</td><td class="num">13 dagen</td></tr>
+        <tr><td>november</td><td class="num">+2 dagen</td><td class="num">15 dagen</td></tr>
+      </table></div>
+      <div class="row"><button class="btn small" id="bdstep" type="button">Stap door de opbouw ▶</button><span class="note" id="bdstepinfo"></span></div>
+    </div>
+    <div class="box warn"><span class="bt">Belangrijk</span>Het is heel belangrijk dat de werknemer slechts die dagen opneemt waar hij recht op heeft op basis van zijn prestaties. Wil hij langer afwezig blijven, dan zal hij op een “ander systeem” beroep moeten doen (inhaalrust, onbetaald verlof, …).</div>`},
+  { id:"2-3-1", nr:"2.3.1", title:"Opname vakantiedagen: grondbeginsel", page:18, html:`
+    <p>De jaarlijkse vakantiedatums worden vastgesteld (in deze volgorde):</p>
+    <ol>
+      <li>door het <b>bevoegd paritair comité</b>;</li>
+      <li>door de <b>ondernemingsraad</b> van de onderneming (wanneer er geen paritaire beslissing is genomen);</li>
+      <li>door een <b>collectieve overeenkomst</b> binnen de onderneming of een <b>akkoord met de syndicale afvaardiging</b>, wanneer er geen beslissing is genomen door het paritair comité of de ondernemingsraad;</li>
+      <li>door een <b>individuele overeenkomst</b> tussen werknemer en werkgever, wanneer er geen collectieve overeenkomst is.</li>
+    </ol>`},
+  { id:"2-3-2", nr:"2.3.2", title:"Opname vakantiedagen: bijzondere regels", page:18, html:`
+    <ul>
+      <li>De vakantiedagen moeten worden toegekend binnen de <span class="mk">twaalf maanden</span> die volgen op het einde van het vakantiedienstjaar.</li>
+      <li>De vakantiedagen die je niet opnam, kan je niet overdragen naar het volgende jaar, mits uitzondering.</li>
+      <li>Alle vakantiedagen moeten dus opgenomen worden <b>voor 31 december</b> van het jaar waarin ze worden toegekend.</li>
+      <li>Vakantiedagen die zullen worden toegekend in de loop van het volgende jaar kan je ook niet vroegtijdig opnemen.</li>
+    </ul>`},
+  { id:"2-3-3", nr:"2.3.3", title:"Opname vakantiedagen: collectieve sluiting", page:19, html:`
+    <p>Als een werknemer geen recht heeft op voldoende vakantiedagen om vakantie te nemen tijdens de jaarlijkse vakantie van de werkgever, kan hij aanspraak maken op een <b>werkloosheidsvergoeding</b> voor de dagen die niet gedekt zijn door het vakantiegeld. Hij moet wel voldoen aan de voorwaarden van toelaatbaarheid op het gebied van werkloosheid, en in het bezit zijn van de attesten (<span class="mk">C3.2 werkgever</span>, <span class="mk">C3.2 werknemer</span> en <span class="mk">C3.2A controlekaart</span>) die door de werkgever worden ingevuld.</p>
+    <p>Het is wel vereist dat de werknemer <b>eerst zijn wettelijke betaalde verlofdagen</b> opneemt, voor hij aanspraak kan maken op werkloosheidsvergoeding. Bovendien zijn deze dagen <b>niet gelijkgestelde dagen</b> voor de berekening van zijn verlofdagen in het jaar erna.</p>`},
+  { id:"2-3-4", nr:"2.3.4", title:"Opname vakantiedagen: in geval van onenigheid", page:19, html:`
+    <p>Wanneer werknemer en werkgever het niet eens geraken over de vakantiedagen, neemt de <b>arbeidsrechtbank</b> een beslissing.</p>`},
+  { id:"2-3-5", nr:"2.3.5", title:"Wat als een werknemer zijn vakantiedagen niet kan opnemen?", page:19, html:`
+    <p>Als een werknemer door <b>ziekte</b> zijn vakantiedagen niet kan opnemen voor 31 december van het jaar waarin ze worden toegekend, mag het vakantiegeld <b>niet worden samengevoegd</b> met de ongeschiktheidsuitkeringen die je van het ziekenfonds ontvangt.</p>
+    <p>De werkgever ontvangt dan een formulier van het <b>ziekenfonds</b>. Daarop moet hij het aantal wettelijke vakantiedagen invullen waarop de werknemer nog recht had toen hij niet meer kon gaan werken.</p>
+    <p>Het ziekenfonds stelt de werknemer een vakantieperiode voor. Tijdens die <b>fictieve vakantie</b> ontvang je geen ongeschiktheidsuitkeringen. Wanneer het ziekenfonds geen vakantieperiode voorstelt, dan zal die, in de loop van de maand <b>december</b> van het vakantiejaar, de dagen die gedekt zijn door je vakantiegeld in rekening brengen.</p>
+    <p>Dezelfde regeling geldt ook wanneer iemand <b>werkloos</b> is. Het vakantiegeld mag dan namelijk ook niet met een werkloosheidsvergoeding worden samengevoegd.</p>
+    <div class="box warn"><span class="bt">Vanaf 01/01/2024 geldt een nieuwe regeling!</span>
+      <p>Werknemers die hun vakantiedagen niet konden opnemen in het vakantiejaar omwille van ziekte, zullen het vakantiegeld voor de niet-opgenomen dagen ontvangen in de maand <b>december</b>. De werknemer krijgt echter <span class="mk">2 jaar</span> de tijd om die niet-opgenomen ziektedagen <b>onbetaald</b> op te nemen.</p>
+      <p style="margin:0"><b>Voorbeeld:</b> Als een werknemer afwezig is wegens langdurige ziekte sinds augustus 2024 en daardoor niet al zijn vakantiedagen kan opnemen in dat jaar, zal hij het bedrag van die niet-opgenomen vakantiedagen ontvangen in december 2024. Hij krijgt 2 jaar de tijd om de niet-opgenomen vakantiedagen onbetaald op te nemen dus tot 31/12/2026.</p>
+    </div>`},
+  { id:"2-3-6", nr:"2.3.6", title:"Werkloosheid in het vakantiedienstjaar", page:20, html:`
+    <h4>Arbeider</h4>
+    <p>Een werkloze arbeider heeft recht op vakantiegeld in de loop van het vakantiejaar dat volgt op het vakantiedienstjaar waarin hij effectieve of gelijkgestelde arbeidsprestaties heeft verricht. Hij moet in dat geval wel voldoen aan de algemene gelijkstellingsvoorwaarden.</p>
+    <p>Hij heeft <b>geen recht</b> op vakantiedagen of vakantiegeld voor de periode waarin hij werkloos was.</p>
+    <p>Volgens de bepalingen in de vakantiereglementering kunnen alleen periodes van <b>economische werkloosheid</b> of periodes van <b>werkloosheid als gevolg van staking</b> worden gelijkgesteld met effectieve arbeidsprestaties. Die gelijkstelling is wel enkel op de betrokkene van toepassing wanneer hij als werknemer is erkend als werkloze.</p>
+    <h4>Bediende</h4>
+    <p>Een bediende die volledig werkloos was gedurende het vakantiedienstjaar of een gedeelte ervan, heeft in het vakantiejaar <b>geen recht op volledige vakantie</b>. De dagen volledige werkloosheid worden niet als gelijkgestelde dagen beschouwd. De bediende krijgt slechts vakantie volgens de duur van de tewerkstelling in het vakantiedienstjaar.</p>`}
+  ]},
+{ id:"h3", nr:"3", title:"Vakantiegeld", page:21,
+  blurb:"Enkel en dubbel vakantiegeld, wie betaalt, hoe en wanneer, de inhoudingen en het aanvullend vakantiegeld; apart voor arbeiders en bedienden.",
+  sections:[
+  { id:"3-0", nr:"3", title:"Inleiding: vakantiegeld", page:21, html:`
+    <p>Voor de dagen vakantie heeft de werknemer recht op vergoeding, het <b>vakantiegeld</b>. Deze vergoeding bestaat uit:</p>
+    <ul>
+      <li><b>het enkelvoudig vakantiegeld</b>: loon dat overeenstemt met de vakantieduur</li>
+      <li><b>het dubbel vakantiegeld</b>: de vergoeding die naast het loon betaald wordt.</li>
+    </ul>`},
+  { id:"3-1-0", nr:"3.1", title:"Arbeiders: financiering via de RSZ", page:21, html:`
+    <p>De werkgever hoeft het vakantiegeld voor zijn arbeiders <b>niet zelf te berekenen en te betalen</b>. De arbeider krijgt zijn vakantiegeld uitbetaald vanwege de <b>vakantiekas</b> (Rijksdienst voor Jaarlijks Verlof (<b>RJV</b>) of ander vakantiefonds).</p>
+    <p>De werkgever financiert dit vakantiegeld <b>indirect via de patronale RSZ-bijdragen</b>:</p>
+    <ul>
+      <li><span class="mk">6 %</span> per kwartaal is inbegrepen in de basiswerkgeversbijdragen (berekend op <b>108 %</b> van het brutoloon);</li>
+      <li><span class="mk">10,27 %</span> wordt geïnd via een <b>jaarlijks debetbericht</b> (door de werkgever te betalen in de maand <b>april</b>, en berekend op de totale loonmassa van de arbeiders van vorig kalenderjaar, verhoogd met 8 %).</li>
+    </ul>`},
+  { id:"3-1-1", nr:"3.1.1", title:"Arbeiders: bedrag van het vakantiegeld", page:21, html:`
+    <p>Het vakantiegeld van de arbeider is gelijk aan <span class="mk">15,38 %</span> van het loon van het vakantiedienstjaar verhoogd tot <b>108 %</b>.</p>
+    <p>Dit vakantiegeld kan uitgesplitst worden in:</p>
+    <div class="tbl-wrap"><table>
+      <tr><th class="num">%</th><th>Onderdeel</th><th>Omschrijving</th></tr>
+      <tr><td class="num mono"><b>8 %</b></td><td>enkel vakantiegeld</td><td>vergoeding voor de loonderving voor de dagen die hij niet werkt</td></tr>
+      <tr><td class="num mono"><b>6,8 %</b></td><td>dubbel vakantiegeld</td><td>supplement bovenop zijn normaal loon als vakantiegeld</td></tr>
+      <tr><td class="num mono"><b>0,58 %</b></td><td>aanvullende vakantievergoeding</td><td>ook conventioneel dubbel vakantiegeld genoemd en wordt geïntegreerd in het totale dubbel vakantiegeld</td></tr>
+      <tr><td class="num mono"><b>15,38 %</b></td><td colspan="2"><b>totaal</b></td></tr>
+    </table></div>`},
+  { id:"3-1-2", nr:"3.1.2", title:"Arbeiders: schuldenaar van het vakantiegeld", page:21, html:`
+    <p>In tegenstelling tot de regeling van de bedienden, betaalt de <b>vakantiekas</b>, waarbij de werkgever is aangesloten, het vakantiegeld uit. Dit gebeurt meestal in de loop van de maanden <b>mei en juni</b>.</p>
+    <p>De werkgever ontvangt van het vakantiefonds een lijst met alle gegevens over het vakantiegeld, de inhoudingen en de vakantiedagen. Verder moet de werkgever niets meer betalen.</p>`},
+  { id:"3-1-3", nr:"3.1.3", title:"Arbeiders: betaling vakantiegeld", page:21, html:`
+    <p>De RJV betaalt enkel nog via <b>overschrijving</b> op de bankrekening van de arbeider. Om zijn vakantiegeld tijdig te kunnen ontvangen moet de arbeider zijn bankrekeningnummer doorgeven aan de RJV:</p>
+    <ul>
+      <li>Via de website van RJV, via “<b>Mijn vakantierekening</b>”;</li>
+      <li>Via aanvraagformulier <span class="mk">L 75</span> (beschikbaar op de website van RJV).</li>
+    </ul>
+    <p>Als de arbeider toch nog via een <b>circulaire cheque</b> betaald wil worden, moet hij dit jaarlijks voor <span class="mk">31 maart</span> per brief aanvragen (jaarlijks te hernieuwen).</p>
+    <p>Indien de arbeider geen van deze stappen onderneemt, dan wordt de betaling van het vakantiegeld tijdelijk bij de RJV <b>geblokkeerd</b>. Het vakantiegeld wordt pas uitbetaald wanneer één van de bovenstaande stappen ondernomen is. Deze werkwijze van uitbetaling geldt alleen voor de RJV zelf, de <b>Sectorale Verlofkassen</b> beslissen zelf en autonoom over de manier van uitbetalen.</p>`},
+  { id:"3-1-4", nr:"3.1.4", title:"Arbeiders: inhoudingen", page:22, html:`
+    <h4>3.1.4.1 Solidariteitsbijdrage</h4>
+    <p>Op het volledige bedrag van het bruto-vakantiegeld wordt <span class="mk">1 %</span> solidariteitsbijdrage ingehouden met het oog op de financiering van bepaalde gelijkgestelde periodes.</p>
+    <h4>3.1.4.2 Sociale lasten</h4>
+    <div class="tbl-wrap"><table>
+      <tr><th>Op</th><th>Sociale lasten</th></tr>
+      <tr><td class="mono">8 % enkel vakantiegeld</td><td>RSZ werd reeds ingehouden bij de berekening van het loon</td></tr>
+      <tr><td class="mono">6,8 % dubbel vakantiegeld</td><td><b>13,07 %</b> bijzondere bijdrage dubbel vakantiegeld van het totale vakantiegeld</td></tr>
+      <tr><td class="mono">0,58 % conventioneel dubbel vakantiegeld</td><td>vrij van sociale lasten</td></tr>
+    </table></div>
+    <h4>3.1.4.3 Fiscale inhoudingen</h4>
+    <p>Op het <b>belastbaar vakantiegeld</b> (= het bruto vakantiegeld min de solidariteitsinhouding en de inhouding op het dubbel vakantiegeld) moet een <b>bedrijfsvoorheffing</b> worden toegepast. Deze bedraagt <span class="mk">17,16 %</span> tot <b>€ 1.700</b> (inkomsten 2025) of <span class="mk">23,22 %</span> voor belastbare vakantiegelden boven dit bedrag.</p>`},
+  { id:"3-1-5", nr:"3.1.5", title:"Arbeiders: aanvullend vakantiegeld", page:22, html:`
+    <p>De arbeider ontvangt van de RJV (of van een vakantiefonds) een aanvullend vakantiegeld dat gelijk is aan <span class="mk">7,69 %</span> van de lonen van de periode die recht geeft op aanvullende vakantie door de arbeider, eventueel vermeerderd met een fictief loon voor de gelijkgestelde dagen. De gelijkgestelde dagen zijn exact dezelfde als voor de berekening van het gewone verlof (bv. ongeval, ziekte, moederschapsrust, …). De dagen jaarlijkse vakantie alsook de aanvullende vakantie worden gelijkgesteld.</p>
+    <p>Het aanvullend vakantiegeld wordt betaald ten laatste in de loop van het <b>kwartaal volgend op het kwartaal</b> tijdens hetwelk het recht op aanvullende vakantie ontstaat.</p>
+    <div class="box ex"><span class="bt">Voorbeeld</span>5 aanvullende vakantiedagen worden opgenomen in augustus 20xx. Deze zullen in de loop van het <b>vierde kwartaal</b> worden uitbetaald.</div>
+    <p>Het aanvullend vakantiegeld komt <b>in mindering</b> van de uitbetaling van het dubbel vakantiegeld van het jaar dat volgt op het opnemen van deze aanvullende vakantie, ten belope van maximum <span class="mk">50 %</span> van het vakantiegeld. De solidariteit van de vakantieregeling voor de arbeiders treedt in werking in de gevallen waarin het totale bedrag van het aanvullende vakantiegeld niet kon worden afgetrokken.</p>`},
+  { id:"3-2-1", nr:"3.2.1", title:"Bedienden: bedrag van het vakantiegeld", page:23, html:`
+    <p>Het <b>enkelvoudig vakantiegeld</b> is de uitbetaling van het normale loon voor de vakantiedagen waarop de bediende recht heeft.</p>
+    <p>Het <b>dubbel vakantiegeld</b> omvat een toeslag van <span class="mk">1/12 van 92 %</span> van het normale loon van de maand waarin de bediende zijn <b>hoofdvakantie</b> opneemt in verhouding tot de gepresteerde/gelijkgestelde arbeidsperiode in het vakantiedienstjaar.</p>
+    <p>De samenstelling van dit dubbel vakantiegeld is:</p>
+    <ul>
+      <li>een toeslag van <span class="mk">85 %</span> bovenop de maandwedde van de maand van de hoofdvakantie</li>
+      <li>een aanvullende vergoeding van <span class="mk">7 %</span>: conventioneel dubbel voor de derde, vierde en vijfde dag van de vierde vakantieweek</li>
+    </ul>`},
+  { id:"3-2-2", nr:"3.2.2", title:"Bedienden: schuldenaar van het vakantiegeld", page:23, html:`
+    <p>Het vakantiegeld voor bedienden is een zaak tussen <b>werkgever en werknemer onderling</b>. De betaling gebeurt niet via externe fondsen en via sociale zekerheidsbijdragen maar wordt <b>rechtstreeks geregeld door de werkgever</b>.</p>`},
+  { id:"3-2-3", nr:"3.2.3", title:"Bedienden: betaling van het vakantiegeld", page:23, html:`
+    <p>Het vakantiegeld wordt aan de bediende rechtstreeks door de werkgever uitbetaald. Het gewone vakantiegeld (<b>enkel vakantiegeld</b>) wordt uitgekeerd op de gewone datum waarop de bezoldiging wordt uitgekeerd.</p>
+    <p>Het <b>dubbel vakantiegeld</b> moet ten laatste uitbetaald worden op het ogenblik dat de <b>hoofdvakantie</b> genomen wordt. Meestal wordt de opdracht tot betaling gegeven voor alle bedienden gezamenlijk en dit kort voor de klassieke vakantieperiodes.</p>`},
+  { id:"3-2-4", nr:"3.2.4", title:"Bedienden: inhoudingen", page:23, html:`
+    <h4>3.2.4.1 Inhoudingen sociale lasten</h4>
+    <div class="tbl-wrap"><table>
+      <tr><th>Op</th><th>Sociale lasten</th></tr>
+      <tr><td>Het enkel vakantiegeld</td><td>De normale RSZ-bijdrage van <b>13,07 %</b> en de BBSZ worden ingehouden. De opgenomen vakantiedagen worden bij bedienden, in tegenstelling tot de regeling bij arbeiders, gewoon doorbetaald. Voor de werkgever zijn de normale patronale lasten verschuldigd.</td></tr>
+      <tr><td>Het 85 % dubbel vakantiegeld</td><td>Bijzondere Bijdrage Dubbel Vakantiegeld van <b>13,07 %</b>. Merk op dat deze solidariteitsbijdrage enkel verschuldigd is door de werknemer en dat het dubbel vakantiegeld voor de werkgever vrij is van sociale lasten.</td></tr>
+      <tr><td>Het 7 % aanvullend dubbel vakantiegeld</td><td>is vrijgesteld van BBDV</td></tr>
+    </table></div>
+    <h4>3.2.4.2 Fiscale inhoudingen (bedrijfsvoorheffing)</h4>
+    <div class="tbl-wrap"><table>
+      <tr><th>Op</th><th>Bedrijfsvoorheffing</th></tr>
+      <tr><td>Enkel vakantiegeld</td><td>gewone regeling zoals bij de maandwedde, het lopende loon van de bediende wordt doorbetaald</td></tr>
+      <tr><td>Dubbel &amp; aanvullend dubbel vakantiegeld</td><td>onderworpen aan de speciale tarieven voor vakantiegeld</td></tr>
+    </table></div>`},
+  { id:"3-2-5", nr:"3.2.5", title:"Bedienden: aanvullend vakantiegeld", page:24, html:`
+    <p>De bediende die vakantie opneemt, ontvangt zijn normale bezoldiging voor de genomen vakantiedagen (= enkel vakantiegeld). Dit zal ook zo zijn voor de aanvullende vakantie. De werkgever betaalt op de gewone datum voor uitbetaling van het loon, het normale loon voor de genomen aanvullende vakantiedagen (= <b>aanvullend vakantiegeld</b>). Op dit loon zal echter <b>enkel een RSZ-werknemersbijdrage</b> (en geen patronale RSZ) verschuldigd zijn.</p>
+    <p>Het vakantiegeld voor de aanvullende vakantie zal <b>in mindering</b> worden gebracht van het dubbel vakantiegeld van het jaar dat volgt op de opname van de aanvullende vakantie. Het dubbel vakantiegeld wordt betaald op het ogenblik dat de hoofdvakantie wordt opgenomen of ingeval van betaling van een vertrekvakantiegeld.</p>
+    <p>Voor de berekening van het bedrag van het aanvullend vakantiegeld, worden ook beschouwd als arbeidsdagen:</p>
+    <ul>
+      <li>De dagen waarop de arbeidsovereenkomst reeds geschorst is (dezelfde gelijkstellingen als de oude regeling, bv. ziekte, ongeval, moederschapsrust, …)</li>
+      <li>De wettelijke vakantiedagen alsook de aanvullende vakantiedagen.</li>
+    </ul>
+    <p>De vermindering zal dus gebeuren:</p>
+    <ul>
+      <li>in het jaar dat volgt op de opname van de aanvullende vakantie of</li>
+      <li>in voorkomend geval, indien er vertrekvakantiegeld wordt berekend (d.i. wanneer oproeping onder de wapens, loopbaanonderbreking, voltijds tijdskrediet of einde contract).</li>
+    </ul>`}
+  ]},
+{ id:"h4", nr:"4", title:"Vertrekvakantiegeld", page:25,
+  blurb:"Vervroegde betaling bij uitdiensttreding (15,34 %), de inhoudingen, het vakantieattest, de verrekening bij de nieuwe werkgever en een samenvatting.",
+  sections:[
+  { id:"4-0", nr:"4", title:"Inleiding: wanneer vertrekvakantiegeld?", page:25, html:`
+    <p>Wanneer de arbeidsovereenkomst van de <b>bediende</b> eindigt, dan moet de werkgever het vakantiegeld voor alle nog niet opgenomen vakantiedagen voor zowel het <b>lopende</b> als het <b>daaropvolgende</b> vakantiejaar <b>vervroegd betalen</b>.</p>
+    <p>Naast het beëindigen van de arbeidsovereenkomst zal ook in volgende omstandigheden vertrekvakantiegeld berekend worden:</p>
+    <ul>
+      <li>wanneer de bediende een nieuwe arbeidsovereenkomst met zijn werkgever afsluit waarin de <b>arbeidsduur vermindert</b></li>
+      <li>wanneer de bediende op het einde van het jaar zijn vakantiedagen niet heeft kunnen opnemen wegens <b>langdurige arbeidsongeschiktheid</b>.</li>
+    </ul>`},
+  { id:"4-1", nr:"4.1", title:"Bedrag", page:25, html:`
+    <p>Het vertrekvakantiegeld bedraagt <span class="mk">15,34 %</span> (= <b>7,67 %</b> enkel vakantiegeld en <b>7,67 %</b> dubbel vakantiegeld) van de <b>loonmassa</b> (= alle vormen van bezoldigingen die onderworpen zijn aan sociale zekerheidsbijdragen) verdiend in het vakantiedienstjaar en bestaat uit <b>twee luiken</b>:</p>
+    <ol>
+      <li>Als de bediende de vakantie nog niet opgenomen heeft die op het <b>vorig vakantiedienstjaar</b> betrekking heeft, betaalt de werkgever hem 15,34 % van de bij hem tijdens het vorig vakantiedienstjaar verdiende wedde. Het enkel vakantiegeld zal berekend worden in verhouding tot de vakantiedagen die nog resten. Het dubbel vakantiegeld zal enkel betaald worden indien de werknemer het grootste deel van zijn vakantie nog niet genomen heeft.</li>
+      <li>Daarboven betaalt de werkgever 15,34 % van de bij hem tijdens het <b>lopende vakantiedienstjaar</b> verdiende brutowedde (eventueel verhoogd met een fictieve wedde voor dagen van arbeidsonderbreking gelijkgesteld met effectief gewerkte dagen). Deze laatste vergoeding dient tot <b>voorafbetaling</b> van de vakantie die het volgende jaar genomen moet worden.</li>
+    </ol>
+    <div class="box ex"><span class="bt">Voorbeeld</span>
+      <p>In 200x wordt de arbeidsovereenkomst van een bediende beëindigd. Hij heeft in 200x recht op <b>24 vakantiedagen</b> (vakantiedienstjaar 200x-1) en heeft er al <b>8 opgenomen</b>. De werkgever heeft hem zijn dubbele vakantiegeld nog niet betaald.</p>
+      <p>Bij de beëindiging van de overeenkomst zal de werkgever het volgende moeten betalen:</p>
+      <p><b>m.b.t. vakantiedienstjaar 200x-1:</b></p>
+      <ul>
+        <li>als enkel vakantiegeld voor de 16 vakantiedagen die nog niet zijn opgenomen: <span class="mono">16/24 × 7,67 %</span> van de bezoldigingen verdiend in 200x-1</li>
+        <li>als dubbel vakantiegeld: <span class="mono">7,67 %</span> van de bezoldigingen verdiend in 200x-1</li>
+      </ul>
+      <p style="margin:0"><b>m.b.t. vakantiedienstjaar 200x:</b> <span class="mono">15,34 %</span> van de bezoldigingen verdiend tussen 1/1/200x en de einddatum.</p>
+    </div>`},
+  { id:"4-2-1", nr:"4.2.1", title:"Inhoudingen: sociale inhoudingen", page:26, html:`
+    <p>De volgende sociale inhoudingen zijn van toepassing:</p>
+    <div class="tbl-wrap"><table>
+      <tr><th>Vertrekvakantiegeld</th><th class="num">% van jaarloon</th><th>Inhoudingen</th></tr>
+      <tr><td>Enkel vakantiegeld</td><td class="num mono">7,67 %</td><td>RSZ 13,07 %, GEEN werkbonus</td></tr>
+      <tr><td>Dubbel vakantiegeld</td><td class="num mono">6,80 %</td><td>BBDV 13,07 %</td></tr>
+      <tr><td>Aanvullend dubbel vakantiegeld</td><td class="num mono">0,87 %</td><td>geen inhoudingen</td></tr>
+    </table></div>`},
+  { id:"4-2-2", nr:"4.2.2", title:"Inhoudingen: fiscale inhoudingen", page:26, html:`
+    <p>Het totaal bedrag van het vervroegd uitbetaald vakantiegeld is onderworpen aan <b>dezelfde tarieven</b> die ook voor het gewone vakantiegeld van toepassing zijn.</p>
+    <h4>Opmerkingen</h4>
+    <ul>
+      <li>Binnen de <b>uitzendsector</b> geldt de regeling dat er <b>geen RSZ</b> op het enkel vakantiegeld gerekend wordt bij de uitdiensttreding en dit in tegenstelling tot bij gewone werkgevers.</li>
+      <li>Bij de berekening van het vakantiegeld uitdiensttreding mag er <b>geen rekening</b> gehouden worden met de <b>werkbonus</b>. De werkbonus mag op jaarbasis maximaal <span class="mk">12 maal</span> toegepast worden, zijnde de 12 maanden van het jaar. De verrekening gebeurt door de volgende werkgever. Deze verrekening kan zeer ingewikkeld worden. Daarom werken we in het kader van deze cursus met voorbeelden waar de werkbonus niet van toepassing is.</li>
+    </ul>`},
+  { id:"4-3", nr:"4.3", title:"Het vakantieattest", page:26, html:`
+    <p>Naast het uitbetalen van de vakantievergoeding is de “vorige” werkgever <b>verplicht</b> de bediende een <b>vakantieattest</b> te overhandigen voor elk van de vakantiedienstjaren waarvoor de bediende vakantievergoeding ontvangen heeft.</p>
+    <p>Op het moment dat de bediende bij zijn nieuwe werkgever in dienst treedt, moet hij het vakantieattest overhandigen dat hij van zijn vorige werkgever(s) gekregen heeft. Een vakantieattest moet door de werkgever <b>alleen verstrekt worden als de arbeidsovereenkomst van de bediende eindigt</b>. Het moet <b>niet</b> afgeleverd worden als het arbeidsregime van de bediende, bij de huidige werkgever, verandert.</p>
+    <p>Meestal worden er <span class="mk">2 vakantieattesten</span> afgeleverd: voor het lopende vakantiejaar (dit kalenderjaar) en voor het lopende vakantiedienstjaar (volgend kalenderjaar).</p>
+    <p>Het vakantieattest moet volgende gegevens vermelden:</p>
+    <ol>
+      <li>de periode dat de bediende in dienst was en eventueel de gelijkgestelde periodes;</li>
+      <li>de overeengekomen arbeidsduur en indien van toepassing de arbeidsduurvermindering in de loop van het vakantiedienstjaar;</li>
+      <li>de brutobedragen van het uitgekeerde enkel en dubbel vakantiegeld en de periodes waarop deze bedragen betrekking hebben;</li>
+      <li>de bijdragen die door de werkgever betaald werden op de bedragen die aan de RSZ werden aangegeven;</li>
+      <li>eventueel het aantal door de bediende reeds opgenomen vakantiedagen en het arbeidsstelsel waarin deze dagen opgenomen werden;</li>
+      <li>de brutobedragen van het uitbetaald aanvullend vakantiegeld (Europese vakantie);</li>
+      <li>het aantal dagen aanvullende vakantie (Europese vakantie) reeds opgenomen door de bediende en het arbeidsstelsel waarin deze vakantiedagen werden opgenomen.</li>
+    </ol>`},
+  { id:"4-4", nr:"4.4", title:"Nieuwe werkgever", page:27, html:`
+    <p>Sinds <span class="mk">2024</span> is er een nieuwe regeling voor de verrekening van het vertrekvakantiegeld voor bedienden bij de nieuwe werkgever.</p>
+    <h4>Stap 1</h4>
+    <p>Wanneer de bediende een dag vakantie neemt op basis van een vakantieattest van een vorige werkgever, betaalt de nieuwe werkgever het loon voor deze dag met <b>aftrek van <span class="mk">90 %</span></b> van het bruto dagloon voor de maand waarin de bediende zijn vakantie neemt. Voor elke opgenomen vakantiedag ontvangt de bediende dus slechts <span class="mk">10 %</span> van zijn bruto dagloon.</p>
+    <h4>Stap 2</h4>
+    <p>In <b>december</b> of in de <b>maand van uitdiensttreding</b> wordt eventueel een correctie aangebracht die voortvloeit uit het verschil tussen het enkel vakantiegeld van 10 % dat tijdens het jaar door de nieuwe werkgever werd betaald (voor de opgenomen vakantiedagen op basis van het vakantieattest) en het effectief door de nieuwe werkgever verschuldigde enkel vakantiegeld, waarvan het reeds door de vorige werkgever betaalde enkel vertrekvakantiegeld werd afgetrokken. Het saldo kan <b>positief</b> zijn (als de aftrek van 90 % te hoog was in verhouding tot het basisloon van het attest) of <b>negatief</b> (als er bijvoorbeeld geen of te weinig dagen werden aangerekend met 90 % aftrek).</p>
+    <p>Het te veel betaald enkel vakantiegeld is een <b>voorschot</b> en bij de regularisering moet de <b>wet op de bescherming van het loon</b> worden nageleefd: de werkgever kan <span class="mk">1/5</span> van het loon inhouden (na aftrek van fiscale en sociale inhoudingen) en, desgevallend, als de grens van 1/5 overschreden wordt, zal de inhouding gespreid worden over <b>twee maanden</b> (tenzij de werknemer uitdrukkelijk akkoord gaat met een eenmalige inhouding).</p>
+    <div class="box warn"><span class="bt">Grens op de aftrek</span>De werkgever kan nooit meer aftrekken dan wat hij aan de bediende had moeten betalen aan vertrekvakantiegeld als de werknemer bij hem in de overeenstemmende periode was tewerkgesteld.</div>
+    <p>Aan de verrekening van het <b>dubbel vakantiegeld</b> verandert niets. Dit gebeurt nog steeds in één keer en, in principe, wanneer de werknemer zijn hoofdvakantie opneemt maar meestal op een vast afgesproken moment binnen de firma.</p>`},
+  { id:"4-5", nr:"4.5", title:"Samenvatting", page:28, html:`
+    <div class="tbl-wrap"><table>
+      <tr><th>Mogelijke situaties</th><th>Tijdstip afrekening</th><th>Bedrag</th></tr>
+      <tr><td><ul style="margin:0;padding-left:1.1em"><li>Voltijds tijdskrediet of voltijdse beroepsloopbaanonderbreking</li><li>Oproeping onder de wapens</li><li>Einde tewerkstelling</li></ul></td><td>Op het ogenblik waarbij één van de situaties zich voordoet</td><td><ul style="margin:0;padding-left:1.1em"><li>7,67 % enkel vertrekvakantiegeld</li><li>7,67 % dubbel vertrekvakantiegeld</li></ul></td></tr>
+      <tr><td>Vermindering van de arbeidsprestaties:<ul style="margin:0;padding-left:1.1em"><li>Vrijwillig deeltijdse arbeid</li><li>Halftijds tijdskrediet</li><li>Halftijds ouderschapsverlof</li><li>…</li></ul></td><td>In december</td><td><ul style="margin:0;padding-left:1.1em"><li>7,67 % enkel vertrekvakantiegeld voor de niet-opgenomen dagen</li><li>7,67 % dubbel vertrekvakantiegeld voor de niet-opgenomen dagen</li></ul></td></tr>
+      <tr><td>Onmogelijk om vakantie op te nemen ingevolge niet voorziene schorsing (bv. ziekte, arbeidsongeval, zwangerschap, …)</td><td>In december</td><td>Het normale loon op basis van het loon van december (+ eventueel een supplement dubbel vakantiegeld)</td></tr>
+    </table></div>
+    <div class="box warn"><span class="bt">Opmerking</span>Bij opname van <b>voltijds thematisch verlof</b> (ouderschapsverlof, verlof medische bijstand en palliatief verlof) wordt <b>GEEN</b> vakantiegeld uitbetaald.</div>`}
+  ]}
+];
+
+/* Tabel aantal vakantiedagen (2.1.1) */
+const DAYTABLE = [[231,Infinity,20],[221,230,19],[212,220,18],[202,211,17],[192,201,16],[182,191,15],[163,181,14],[154,162,13],[144,153,12],[135,143,11],[125,134,10],[106,124,9],[97,105,8],[87,96,7],[77,86,6],[64,76,5],[48,63,4],[39,47,3],[20,38,2],[10,19,1],[0,9,0]];
+
+/* Begrippen */
+const TERMS = [
+ {t:"Jaarlijkse vakantie", s:"1-0", c:"h1", d:"Dagen die de arbeidsovereenkomst schorsen. In principe heeft iedere werknemer in de privésector recht op 20 dagen. Er wordt niet gewerkt, maar de werknemer ontvangt wel loon en dubbel vakantiegeld."},
+ {t:"Verworven recht", s:"1-1-1", c:"h1", d:"Het recht op vakantie is een verworven recht waar niet van afgeweken kan worden: het is bij wet verboden om af te zien van je recht op vakantie."},
+ {t:"Vakantiedienstjaar", s:"1-1-2", c:"h1", d:"Het jaar waarin arbeid wordt gepresteerd en dat recht geeft op dagen vakantie en vakantiegeld. Omvat steeds een kalenderjaar (01/01 t.e.m. 31/12)."},
+ {t:"Vakantiejaar", s:"1-1-2", c:"h1", d:"Het jaar waarin de gerechtigde vakantie neemt: het jaar na het vakantiedienstjaar (vakantiedienstjaar 2024 → vakantiejaar 2025)."},
+ {t:"Gelijkgestelde dagen", s:"1-1-3", c:"h1", d:"Inactiviteitsdagen die gelijkgesteld worden met effectief gewerkte dagen voor de berekening van de vakantieduur, bv. de eerste 12 maanden ziekte, zwangerschapsrust, klein verlet, staking, tijdelijke werkloosheid om economische redenen."},
+ {t:"Jeugdvakantie", s:"1-2-1", c:"h1", d:"Regeling waarbij de pas afgestudeerde jongere (jonger dan 25 op 31/12 van het vakantiedienstjaar) ter aanvulling van zijn onvolledig aantal betaalde vakantiedagen jeugdvakantie mag nemen, tot maximaal 4 weken min de wettelijke vakantiedagen."},
+ {t:"Jeugdvakantie-uitkering", s:"1-2-4", c:"h1", d:"Uitkering ten laste van de werkloosheidsverzekering (RVA): 65 % van het brutoloon van de eerste maand met jeugdvakantie, loon begrensd tot € 2 837,89/maand (max. € 70,95 per dag in de zesdagenweek), 10,09 % fiscale voorheffing."},
+ {t:"Seniorvakantie", s:"1-3-1", c:"h1", d:"Regeling uit de wet van 23 december 2005 (generatiepact): 50-plussers die het werk hervatten en geen recht hebben op de volledige vier weken vakantie krijgen bovenop hun gewone vakantiedagen seniorvakantiedagen."},
+ {t:"Seniorvakantie-uitkering", s:"1-3-4", c:"h1", d:"Uitkering ten laste van de RVA, beschouwd als werkloosheidsuitkering: 65 % van het gemiddelde dagloon, loon begrensd tot € 2 837,89/maand (max. € 70,95 per dag), 10,09 % fiscale voorheffing."},
+ {t:"Generatiepact", s:"1-3-1", c:"h1", d:"Wet van 23 december 2005 die de regeling van de seniorvakantie heeft uitgewerkt."},
+ {t:"C103 Jeugdvakantie / Seniorvakantie werknemer", s:"1-2-5", c:"h1", d:"Formulier dat de jongere of senior zelf invult en na de eerste maand vakantie indient bij de vakbond of de openbare hulpkas. Moet ten laatste in februari van het volgende jaar bij de RVA toekomen."},
+ {t:"Aangifte scenario 9", s:"1-2-5", c:"h1", d:"Elektronische aangifte die de werkgever doet na de eerste maand jeugd- of seniorvakantie. De werknemer krijgt er een print van."},
+ {t:"Aangifte scenario 10", s:"1-2-5", c:"h1", d:"Elektronische aangifte van het aantal uren jeugd- of seniorvakantie voor elke volgende maand. De betaling van de uitkeringen gebeurt op basis van deze aangiftes."},
+ {t:"RVA", s:"1-2-1", c:"h1", d:"Betaalt de jeugdvakantie- en seniorvakantie-uitkeringen (ten laste van de werkloosheidsverzekering) en ontvangt de aanvragen C103. Betaalt ook uitkeringen bij tijdelijke werkloosheid door collectieve sluiting."},
+ {t:"Europese aanvullende vakantie", s:"1-4-1", c:"h1", d:"Systeem sinds 1 april 2012 (Belgisch Staatsblad 28/06/2012) waarbij werknemers die een activiteit aanvatten of hervatten na een aanloopperiode van 3 maanden extra vakantie kunnen nemen, gefinancierd door de werknemer zelf via een voorafname op het dubbel vakantiegeld van het volgende jaar."},
+ {t:"Aanloopperiode", s:"1-4-2", c:"h1", d:"Periode van ten minste 3 maanden werkelijke arbeidsprestaties of gelijkgestelde onderbreking in het kalenderjaar van aanvatting of hervatting, al dan niet doorlopend, bij één of meerdere werkgevers."},
+ {t:"Aanvatten van een activiteit", s:"1-4-2", c:"h1", d:"Starten na een activiteit die nooit geheel of gedeeltelijk onderworpen was aan de vakantieregeling in de privésector: zelfstandige, buitenland, publieke sector, of veranderen van arbeidsstelsel zonder onderbreking (bv. deeltijds naar voltijds)."},
+ {t:"Hervatten van een activiteit", s:"1-4-2", c:"h1", d:"Opnieuw beginnen na werkloosheid, arbeidsongeschiktheid, oproeping onder de wapens, loopbaanonderbreking, voltijds tijdskrediet, einde contract of verlof zonder wedde."},
+ {t:"Collectieve sluiting", s:"2-3-3", c:"h2", d:"Jaarlijkse vakantie van de werkgever. Wie onvoldoende vakantiedagen heeft, kan na opname van zijn wettelijke dagen een werkloosheidsvergoeding krijgen (attesten C3.2 werkgever, C3.2 werknemer, C3.2A controlekaart). Die dagen zijn niet gelijkgesteld."},
+ {t:"C3.2 werkgever, C3.2 werknemer en C3.2A controlekaart", s:"2-3-3", c:"h2", d:"Attesten die de werkgever invult en die de werknemer nodig heeft om bij collectieve sluiting een werkloosheidsvergoeding te krijgen."},
+ {t:"Vakantiekas", s:"2-1-1", c:"h2", d:"Berekent het aantal vakantiedagen voor arbeiders en betaalt hun vakantiegeld uit (RJV of ander vakantiefonds), meestal in mei en juni."},
+ {t:"Formule A × 5/R × Q/S", s:"2-1-1", c:"h2", d:"Formule om de dagen van een arbeider om te zetten naar de voltijdse vijfdagenweek. A = gepresteerde + gelijkgestelde dagen; R = dagen per week volgens contract; Q = uren per week volgens contract; S = uren per week van een voltijdse werknemer."},
+ {t:"Tewerkstellingsbreuk", s:"2-1-1", c:"h2", d:"De breuk waarmee het aantal dagen (omgezet naar de vijfdagenweek) vermenigvuldigd wordt: Q/S in de formule A × 5/R × Q/S."},
+ {t:"Vijfdagen- / zesdagenstelsel", s:"2-2-1", c:"h2", d:"Bedienden: 2 vakantiedagen per maand in de zesdagenweek (max. 24). Omrekening naar de vijfdagenweek door per schijf van 6 vakantiedagen 1 dag af te trekken (max. 20)."},
+ {t:"Arbeidsrechtbank", s:"2-3-4", c:"h2", d:"Neemt een beslissing wanneer werknemer en werkgever het niet eens geraken over de vakantiedagen."},
+ {t:"Paritair comité", s:"2-3-1", c:"h2", d:"Stelt als eerste de jaarlijkse vakantiedatums vast. Daarna volgen de ondernemingsraad, een collectieve overeenkomst of akkoord met de syndicale afvaardiging en tot slot een individuele overeenkomst."},
+ {t:"Fictieve vakantie", s:"2-3-5", c:"h2", d:"Vakantieperiode die het ziekenfonds voorstelt aan een zieke werknemer die zijn vakantiedagen niet kon opnemen; in die periode ontvangt hij geen ongeschiktheidsuitkeringen."},
+ {t:"Enkel(voudig) vakantiegeld", s:"3-0", c:"h3", d:"Loon dat overeenstemt met de vakantieduur. Arbeiders: 8 %. Bedienden: het normale loon voor de vakantiedagen, betaald op de gewone loondatum."},
+ {t:"Dubbel vakantiegeld", s:"3-0", c:"h3", d:"De vergoeding die naast het loon betaald wordt. Arbeiders: 6,8 % (+ 0,58 %). Bedienden: 1/12 van 92 % (85 % + 7 %) van het loon van de maand van de hoofdvakantie."},
+ {t:"RJV (Rijksdienst voor Jaarlijks Verlof)", s:"3-1-0", c:"h3", d:"Vakantiekas die het vakantiegeld van arbeiders uitbetaalt, enkel nog via overschrijving (bankrekening doorgeven via “Mijn vakantierekening” of formulier L 75)."},
+ {t:"Jaarlijks debetbericht", s:"3-1-0", c:"h3", d:"Inning van 10,27 %, door de werkgever te betalen in april, berekend op de totale loonmassa van de arbeiders van vorig kalenderjaar verhoogd met 8 %."},
+ {t:"Aanvullende vakantievergoeding (conventioneel dubbel vakantiegeld)", s:"3-1-1", c:"h3", d:"0,58 % bij arbeiders, geïntegreerd in het totale dubbel vakantiegeld en vrij van sociale lasten. Bij bedienden: de aanvullende vergoeding van 7 % voor de 3de, 4de en 5de dag van de vierde vakantieweek."},
+ {t:"L 75", s:"3-1-3", c:"h3", d:"Aanvraagformulier (op de website van RJV) waarmee de arbeider zijn bankrekeningnummer doorgeeft aan de RJV."},
+ {t:"Mijn vakantierekening", s:"3-1-3", c:"h3", d:"Onderdeel van de website van de RJV waarmee de arbeider zijn bankrekeningnummer doorgeeft."},
+ {t:"Circulaire cheque", s:"3-1-3", c:"h3", d:"Alternatieve betaalwijze van de RJV; de arbeider moet dit jaarlijks vóór 31 maart per brief aanvragen."},
+ {t:"Sectorale verlofkassen", s:"3-1-3", c:"h3", d:"Beslissen zelf en autonoom over de manier van uitbetalen van het vakantiegeld (de regels over overschrijving/cheque gelden enkel voor de RJV)."},
+ {t:"Solidariteitsbijdrage (1 %)", s:"3-1-4", c:"h3", d:"Inhouding van 1 % op het volledige bruto-vakantiegeld van arbeiders, voor de financiering van bepaalde gelijkgestelde periodes."},
+ {t:"Bijzondere bijdrage dubbel vakantiegeld (BBDV)", s:"3-2-4", c:"h3", d:"13,07 % op het dubbel vakantiegeld (bediende: op het 85 %-deel). Enkel verschuldigd door de werknemer; het 7 % aanvullend dubbel vakantiegeld is vrijgesteld."},
+ {t:"Belastbaar vakantiegeld", s:"3-1-4", c:"h3", d:"Bruto vakantiegeld min de solidariteitsinhouding en de inhouding op het dubbel vakantiegeld. Hierop: bedrijfsvoorheffing 17,16 % tot € 1.700 of 23,22 % daarboven (inkomsten 2025)."},
+ {t:"Aanvullend vakantiegeld", s:"3-1-5", c:"h3", d:"Vakantiegeld voor de Europese aanvullende vakantie. Arbeiders: 7,69 % van de lonen, betaald uiterlijk in het kwartaal na het ontstaan van het recht. Bedienden: normaal loon met enkel RSZ-werknemersbijdrage. Komt in mindering van het dubbel vakantiegeld van het volgende jaar."},
+ {t:"Hoofdvakantie", s:"3-2-1", c:"h3", d:"De vakantie waarvan de maand bepalend is voor het dubbel vakantiegeld van de bediende; het dubbel vakantiegeld moet ten laatste dan uitbetaald worden."},
+ {t:"Vertrekvakantiegeld", s:"4-0", c:"h4", d:"Vervroegde betaling van het vakantiegeld bij einde van de arbeidsovereenkomst van een bediende (en bij arbeidsduurvermindering of langdurige arbeidsongeschiktheid): 15,34 % = 7,67 % enkel + 7,67 % dubbel."},
+ {t:"Loonmassa", s:"4-1", c:"h4", d:"Alle vormen van bezoldigingen die onderworpen zijn aan sociale zekerheidsbijdragen."},
+ {t:"Werkbonus", s:"4-2-2", c:"h4", d:"Mag niet in rekening gebracht worden bij het vakantiegeld uitdiensttreding; mag op jaarbasis maximaal 12 maal toegepast worden. De verrekening gebeurt door de volgende werkgever."},
+ {t:"Vakantieattest", s:"4-3", c:"h4", d:"Attest dat de vorige werkgever verplicht aan de bediende geeft bij einde van de arbeidsovereenkomst, per vakantiedienstjaar waarvoor vakantiegeld werd betaald (meestal 2). De bediende geeft het aan de nieuwe werkgever."},
+ {t:"Aftrek van 90 %", s:"4-4", c:"h4", d:"Sinds 2024: neemt een bediende vakantie op basis van een vakantieattest, dan trekt de nieuwe werkgever 90 % van het bruto dagloon af; de bediende ontvangt 10 %. Correctie in december of in de maand van uitdiensttreding."},
+ {t:"Wet op de bescherming van het loon", s:"4-4", c:"h4", d:"Bij regularisatie van te veel betaald enkel vakantiegeld mag de werkgever 1/5 van het nettoloon inhouden; daarboven wordt gespreid over twee maanden, tenzij de werknemer akkoord gaat met een eenmalige inhouding."},
+ {t:"Voltijds thematisch verlof", s:"4-5", c:"h4", d:"Ouderschapsverlof, verlof medische bijstand en palliatief verlof: bij opname wordt GEEN vakantiegeld uitbetaald. Periodes van thematische verloven zijn ook niet gelijkgesteld."}
+];
+
+/* Kerncijfers */
+const FIGS = [
+ {v:"20 dagen", d:"Wettelijke vakantie bij een volledig jaar (vijfdagenweek)", s:"1-0", c:"h1"},
+ {v:"4 weken", d:"Maximum wettelijke vakantie, in het arbeidsstelsel op het moment van de vakantie", s:"2-0", c:"h2"},
+ {v:"12 maanden", d:"Gelijkstelling bij ziekte of ongeval van gemeen recht (de eerste …)", s:"1-1-3", c:"h1"},
+ {v:"66 %", d:"Minimum gedeeltelijke ongeschiktheid (arbeidsongeval/beroepsziekte) voor gelijkstelling eerste 12 maanden", s:"1-1-3", c:"h1"},
+ {v:"25 jaar", d:"Jeugdvakantie: deze leeftijd niet bereikt op 31/12 van het vakantiedienstjaar", s:"1-2-2", c:"h1"},
+ {v:"1 maand", d:"Jeugdvakantie: minimum duur arbeidsovereenkomst(en) na de studies", s:"1-2-2", c:"h1"},
+ {v:"13 dagen", d:"Jeugdvakantie: minimum effectieve of gelijkgestelde dagen tewerkstelling", s:"1-2-2", c:"h1"},
+ {v:"70 uren", d:"Jeugdvakantie: alternatief minimum arbeidsuren of gelijkgestelde uren", s:"1-2-2", c:"h1"},
+ {v:"65 %", d:"Jeugd- en seniorvakantie-uitkering (van het brutoloon / gemiddelde dagloon)", s:"1-2-4", c:"h1"},
+ {v:"€ 2 837,89", d:"Maandelijkse loongrens voor jeugd- en seniorvakantie-uitkering", s:"1-2-4", c:"h1"},
+ {v:"€ 70,95", d:"Maximum dagbedrag jeugd- en seniorvakantie-uitkering (zesdagenweek)", s:"1-2-4", c:"h1"},
+ {v:"10,09 %", d:"Fiscale voorheffing op jeugd- en seniorvakantie-uitkering", s:"1-2-4", c:"h1"},
+ {v:"februari", d:"Uiterste maand waarin C103 bij de RVA moet toekomen (jaar na de vakantie)", s:"1-2-5", c:"h1"},
+ {v:"scenario 9", d:"Elektronische aangifte werkgever na de eerste maand jeugd-/seniorvakantie", s:"1-2-5", c:"h1"},
+ {v:"scenario 10", d:"Elektronische aangifte werkgever voor elke volgende maand jeugd-/seniorvakantie", s:"1-2-5", c:"h1"},
+ {v:"50 jaar", d:"Seniorvakantie: minimumleeftijd op 31 december van het vakantiedienstjaar", s:"1-3-2", c:"h1"},
+ {v:"23/12/2005", d:"Wet betreffende het generatiepact (seniorvakantie)", s:"1-3-1", c:"h1"},
+ {v:"28/06/2012", d:"Publicatie Europese aanvullende vakantie in het Belgisch Staatsblad", s:"1-4-1", c:"h1"},
+ {v:"1 april 2012", d:"Start van de Europese aanvullende vakantie", s:"1-4-1", c:"h1"},
+ {v:"3 maanden", d:"Aanloopperiode voor aanvullende (Europese) vakantie", s:"1-4-2", c:"h1"},
+ {v:"A × 5/R × Q/S", d:"Formule aantal dagen arbeider (omzetting naar voltijdse vijfdagenweek)", s:"2-1-1", c:"h2"},
+ {v:"≥ 0,50", d:"Decimalen vanaf 50 → afronden naar de hogere eenheid (kleiner dan 50: niet meetellen)", s:"2-1-1", c:"h2"},
+ {v:"231 dagen", d:"Vanaf dit aantal dagen: 20 wettelijke vakantiedagen (arbeider)", s:"2-1-1", c:"h2"},
+ {v:"2 dagen/maand", d:"Opbouw vakantie bediende in de zesdagenweek", s:"2-2-1", c:"h2"},
+ {v:"24 / 20 dagen", d:"Maximale vakantieduur bediende in de 6-dagenweek / 5-dagenweek", s:"2-2-1", c:"h2"},
+ {v:"1 per 6", d:"Omrekening naar vijfdagenweek: per schijf van 6 vakantiedagen 1 dag minder", s:"2-2-1", c:"h2"},
+ {v:"6 (5) dagen", d:"Aanvullende vakantie bediende na aanloopperiode: max. 6 in zesdagenstelsel, 5 in vijfdagenstelsel", s:"2-2-3", c:"h2"},
+ {v:"31 december", d:"Uiterste datum om vakantiedagen op te nemen in het jaar waarin ze worden toegekend", s:"2-3-2", c:"h2"},
+ {v:"2 jaar", d:"Termijn om door ziekte niet-opgenomen vakantiedagen onbetaald op te nemen (regeling vanaf 01/01/2024)", s:"2-3-5", c:"h2"},
+ {v:"6 %", d:"Per kwartaal in de basiswerkgeversbijdragen (op 108 % van het brutoloon) voor vakantiegeld arbeiders", s:"3-1-0", c:"h3"},
+ {v:"10,27 %", d:"Jaarlijks debetbericht in april (loonmassa arbeiders vorig jaar + 8 %)", s:"3-1-0", c:"h3"},
+ {v:"108 %", d:"Loon van de arbeider waarop het vakantiegeld berekend wordt", s:"3-1-1", c:"h3"},
+ {v:"15,38 %", d:"Totaal vakantiegeld arbeider (8 % + 6,8 % + 0,58 %)", s:"3-1-1", c:"h3"},
+ {v:"8 %", d:"Enkel vakantiegeld arbeider", s:"3-1-1", c:"h3"},
+ {v:"6,8 %", d:"Dubbel vakantiegeld arbeider", s:"3-1-1", c:"h3"},
+ {v:"0,58 %", d:"Aanvullende vakantievergoeding / conventioneel dubbel vakantiegeld arbeider", s:"3-1-1", c:"h3"},
+ {v:"mei – juni", d:"Maanden waarin de vakantiekas meestal het vakantiegeld van arbeiders uitbetaalt", s:"3-1-2", c:"h3"},
+ {v:"L 75", d:"Formulier om bankrekeningnummer aan de RJV door te geven", s:"3-1-3", c:"h3"},
+ {v:"31 maart", d:"Uiterste datum om jaarlijks een circulaire cheque per brief aan te vragen", s:"3-1-3", c:"h3"},
+ {v:"1 %", d:"Solidariteitsbijdrage op het volledige bruto-vakantiegeld van arbeiders", s:"3-1-4", c:"h3"},
+ {v:"13,07 %", d:"Bijzondere bijdrage dubbel vakantiegeld (BBDV) en RSZ-werknemersbijdrage", s:"3-2-4", c:"h3"},
+ {v:"17,16 %", d:"Bedrijfsvoorheffing vakantiegeld arbeider tot € 1.700 (inkomsten 2025)", s:"3-1-4", c:"h3"},
+ {v:"23,22 %", d:"Bedrijfsvoorheffing vakantiegeld arbeider boven € 1.700 (inkomsten 2025)", s:"3-1-4", c:"h3"},
+ {v:"7,69 %", d:"Aanvullend vakantiegeld arbeider (van de lonen van de periode die recht geeft)", s:"3-1-5", c:"h3"},
+ {v:"max. 50 %", d:"Aanvullend vakantiegeld arbeider komt in mindering van het dubbel vakantiegeld van het volgende jaar", s:"3-1-5", c:"h3"},
+ {v:"92 %", d:"Dubbel vakantiegeld bediende: 1/12 van 92 % van het loon van de maand van de hoofdvakantie", s:"3-2-1", c:"h3"},
+ {v:"85 %", d:"Toeslag bovenop de maandwedde van de maand van de hoofdvakantie (bediende)", s:"3-2-1", c:"h3"},
+ {v:"7 %", d:"Conventioneel dubbel voor de 3de, 4de en 5de dag van de vierde vakantieweek (bediende)", s:"3-2-1", c:"h3"},
+ {v:"15,34 %", d:"Vertrekvakantiegeld (7,67 % enkel + 7,67 % dubbel)", s:"4-1", c:"h4"},
+ {v:"7,67 %", d:"Enkel vertrekvakantiegeld (RSZ 13,07 %, geen werkbonus)", s:"4-2-1", c:"h4"},
+ {v:"6,80 %", d:"Dubbel vertrekvakantiegeld (BBDV 13,07 %)", s:"4-2-1", c:"h4"},
+ {v:"0,87 %", d:"Aanvullend dubbel vertrekvakantiegeld (geen inhoudingen)", s:"4-2-1", c:"h4"},
+ {v:"12 maal", d:"Maximaal aantal keer dat de werkbonus op jaarbasis mag toegepast worden", s:"4-2-2", c:"h4"},
+ {v:"2 attesten", d:"Meestal afgeleverde vakantieattesten (lopend vakantiejaar + lopend vakantiedienstjaar)", s:"4-3", c:"h4"},
+ {v:"90 % / 10 %", d:"Aftrek door nieuwe werkgever op bruto dagloon / wat de bediende ontvangt per vakantiedag (sinds 2024)", s:"4-4", c:"h4"},
+ {v:"1/5", d:"Maximale inhouding op het nettoloon bij regularisatie (wet op de bescherming van het loon)", s:"4-4", c:"h4"}
+];
+
+/* Quizvragen: type mc (meerkeuze) of tf (juist/fout) */
+const Q = [
+ // H1
+ {c:"h1",s:"1-0",q:"Op hoeveel dagen wettelijke vakantie heeft een werknemer in de privésector in principe recht?",o:["15 dagen","20 dagen","24 dagen","25 dagen"],a:1,e:"In principe heeft iedere werknemer, tewerkgesteld in de privésector, recht op 20 dagen."},
+ {c:"h1",s:"1-0",q:"Wat gebeurt er met de arbeidsovereenkomst tijdens de dagen jaarlijkse vakantie?",o:["Ze wordt beëindigd","Ze wordt geschorst","Ze wordt omgezet naar deeltijds","Er verandert niets"],a:1,e:"De arbeidsovereenkomst wordt geschorst door de dagen jaarlijkse vakantie."},
+ {c:"h1",s:"1-1-1",tf:true,q:"Een werknemer mag vrijwillig afzien van zijn recht op vakantie als de werkgever akkoord gaat.",a:false,e:"Het recht op vakantie is een verworven recht. Het is bij wet verboden om af te zien van je recht op vakantie."},
+ {c:"h1",s:"1-1-1",tf:true,q:"Van de vakantiedagen mogen feestdagen afgetrokken worden.",a:false,e:"Van de vakantiedagen mogen nooit andere “van arbeid vrijgestelde” dagen (bv. feestdagen) afgetrokken worden."},
+ {c:"h1",s:"1-1-2",q:"Een werknemer werkt in 2024. In welk jaar neemt hij de vakantie op die hij daarmee opbouwt?",o:["2024","2025","2026","Wanneer hij wil"],a:1,e:"Vakantiedienstjaar 2024 → vakantiejaar 2025 (het jaar na het vakantiedienstjaar)."},
+ {c:"h1",s:"1-1-2",q:"Hoe heet het jaar waarin arbeid wordt gepresteerd dat recht geeft op vakantiedagen en vakantiegeld?",o:["Vakantiejaar","Vakantiedienstjaar","Referentiejaar","Boekjaar"],a:1,e:"Het vakantiedienstjaar is het jaar waarin arbeid wordt gepresteerd en dat recht geeft op dagen vakantie en vakantiegeld."},
+ {c:"h1",s:"1-1-2",q:"Welke twee regelingen zijn uitzonderingen op de regel dat je in het vakantiedienstjaar een volledig jaar moet werken voor een volledige vakantie?",o:["Jeugdvakantie en seniorvakantie","Klein verlet en zwangerschapsrust","Tijdskrediet en ouderschapsverlof","Collectieve sluiting en inhaalrust"],a:0,e:"Uitzonderingen hierop zijn de jeugdvakantie en de seniorvakantie."},
+ {c:"h1",s:"1-1-3",q:"Welke van deze afwezigheden is NIET gelijkgesteld?",o:["Klein verlet","Staking","Technische stoornis of weerverlet","Vaderschapsverlof"],a:2,e:"Technische stoornis of weerverlet staat in de lijst van niet-gelijkgestelde dagen."},
+ {c:"h1",s:"1-1-3",q:"Welke van deze afwezigheden is WEL gelijkgesteld?",o:["Ouderschapsverlof","Tijdelijke werkloosheid om economische redenen","Periode van verbrekingsvergoeding","Ongerechtvaardigde afwezigheid"],a:1,e:"Tijdelijke werkloosheid om economische redenen is gelijkgesteld. De andere drie zijn niet gelijkgesteld."},
+ {c:"h1",s:"1-1-3",q:"Hoe lang is ziekte of ongeval van gemeen recht gelijkgesteld?",o:["De eerste 6 maanden","De eerste 12 maanden","De eerste 24 maanden","De volledige periode"],a:1,e:"De eerste 12 maanden van ziekte of ongeval van gemeen recht zijn gelijkgesteld."},
+ {c:"h1",s:"1-1-3",tf:true,q:"Een periode van verbrekingsvergoeding (niet gepresteerde opzeggingstermijn) is gelijkgesteld.",a:false,e:"Periodes van verbrekingsvergoeding staan bij de dagen die NIET gelijkgesteld zijn."},
+ {c:"h1",s:"1-1-3",tf:true,q:"Volledige schorsing wegens tijdskrediet is gelijkgesteld met gewerkte dagen.",a:false,e:"Volledige schorsing wegens loopbaanonderbreking of tijdskrediet is niet gelijkgesteld."},
+ {c:"h1",s:"1-2-2",q:"Welke leeftijd mag de jongere op 31/12 van het vakantiedienstjaar niet bereikt hebben voor jeugdvakantie?",o:["21 jaar","23 jaar","25 jaar","26 jaar"],a:2,e:"Op 31/12 van het vakantiedienstjaar de leeftijd van 25 jaar niet bereikt hebben."},
+ {c:"h1",s:"1-2-2",q:"Welke minimumtewerkstelling na de studies is nodig voor jeugdvakantie?",o:["3 maanden en 60 dagen","1 maand met minstens 13 dagen of 70 uren","2 weken met minstens 10 dagen","6 maanden voltijds"],a:1,e:"Minstens één maand verbonden door één of meerdere arbeidsovereenkomsten, met minstens 13 effectieve of gelijkgestelde dagen of minstens 70 arbeidsuren of gelijkgestelde uren."},
+ {c:"h1",s:"1-2-2",tf:true,q:"Een jongere die deeltijds werkt, heeft geen recht op jeugdvakantie.",a:false,e:"Ook een jongere die deeltijds is tewerkgesteld heeft recht op jeugdvakantiedagen."},
+ {c:"h1",s:"1-2-2",tf:true,q:"De jeugdvakantie is een verplichting voor de jongere.",a:false,e:"De jeugdvakantie is een recht en geen verplichting."},
+ {c:"h1",s:"1-2-3",q:"Wanneer mag de jongere jeugdvakantie opnemen?",o:["Alleen tijdens een tewerkstelling als loontrekkende","Ook tijdens een periode van volledige werkloosheid","Alleen tijdens de collectieve sluiting","Op elk moment van het jaar"],a:0,e:"De jeugdvakantie kan alleen worden opgenomen tijdens een tewerkstelling als loontrekkende (de gewone vakantiedagen kunnen wel tijdens vergoede volledige werkloosheid)."},
+ {c:"h1",s:"1-2-3",q:"Wat is het maximum aantal jeugdvakantiedagen?",o:["4 weken, verminderd met de wettelijke vakantiedagen","4 weken bovenop de wettelijke vakantiedagen","2 weken","20 dagen bovenop de wettelijke vakantie"],a:0,e:"Aanvullende vakantiedagen met een maximum van 4 weken, te verminderen met de wettelijke vakantiedagen waarop hij recht heeft."},
+ {c:"h1",s:"1-2-4",q:"Hoeveel bedraagt de jeugdvakantie-uitkering?",o:["50 % van het brutoloon","60 % van het brutoloon","65 % van het brutoloon","100 % van het brutoloon"],a:2,e:"65 % van het brutoloon van de eerste maand waarin de jeugdvakantie wordt genomen, begrensd tot € 2 837,89 per maand."},
+ {c:"h1",s:"1-2-4",q:"Hoe wordt het maximumbedrag van € 70,95 per dag berekend?",o:["2 837,89 / 22 × 55 %","2 837,89 / 26 × 65 %","2 837,89 / 30 × 75 %","2 837,89 / 21,67 × 65 %"],a:1,e:"€ 70,95 = 2 837,89/26 × 65 %, gerekend in de zesdagenweek."},
+ {c:"h1",s:"1-2-4",q:"Welke fiscale voorheffing wordt op de jeugd- en seniorvakantie-uitkering ingehouden?",o:["10,09 %","13,07 %","17,16 %","23,22 %"],a:0,e:"Op dit bedrag wordt een fiscale voorheffing ingehouden van 10,09 %."},
+ {c:"h1",s:"1-2-5",q:"Met welk formulier vraagt de jongere de jeugdvakantie-uitkering aan?",o:["C3.2A","C103 Jeugdvakantie werknemer","L 75","C4"],a:1,e:"De aanvraag gebeurt met het formulier C103 Jeugdvakantie werknemer dat de jongere zelf invult."},
+ {c:"h1",s:"1-2-5",q:"Welke elektronische aangifte doet de werkgever voor elke volgende maand jeugdvakantie (na de eerste)?",o:["Scenario 5","Scenario 9","Scenario 10","Scenario 12"],a:2,e:"Na de eerste maand: scenario 9. Voor elke volgende maand: scenario 10 (aantal uren jeugdvakantie)."},
+ {c:"h1",s:"1-2-5",q:"Wanneer moet de aanvraag C103 uiterlijk bij de RVA toekomen?",o:["Eind december van het vakantiejaar","In februari van het jaar volgend op het jaar waarin vakantie wordt genomen","Binnen de maand na de vakantie","Voor 31 maart van het vakantiejaar"],a:1,e:"De aanvraag moet ten laatste in februari van het jaar volgend op het jaar waarin vakantie wordt genomen bij de RVA toekomen."},
+ {c:"h1",s:"1-3-2",q:"Hoe oud moet een werknemer minstens zijn op 31 december van het vakantiedienstjaar voor seniorvakantie?",o:["45 jaar","50 jaar","55 jaar","60 jaar"],a:1,e:"Op 31 december van het vakantiedienstjaar minstens 50 jaar zijn."},
+ {c:"h1",s:"1-3-1",q:"Door welke wet werd de seniorvakantie ingevoerd?",o:["Wet van 23 december 2005 betreffende het generatiepact","KB van 28/06/2012","Wet op de bescherming van het loon","Jaarlijkse Vakantiewet van 2024"],a:0,e:"De wet van 23 december 2005 betreffende het generatiepact."},
+ {c:"h1",s:"1-3-2",q:"Welke situatie in het vakantiedienstjaar is een voorwaarde voor seniorvakantie?",o:["Studies beëindigd","Volledig werkloos of invalide geweest","Tijdskrediet opgenomen","Overgestapt van arbeider naar bediende"],a:1,e:"In het vakantiedienstjaar volledig werkloos of invalide geweest zijn en om die reden geen recht hebben op de volledige vier weken betaalde vakantie."},
+ {c:"h1",s:"1-3-3",tf:true,q:"Een werkloze 50-plusser kan nog seniorvakantiedagen opnemen.",a:false,e:"De seniorvakantie kan enkel opgenomen worden tijdens de arbeidsovereenkomst. Zodra de werknemer werkloos is of een ander statuut heeft, kan hij er geen beroep meer op doen."},
+ {c:"h1",s:"1-3-4",q:"Hoe wordt de seniorvakantie-uitkering beschouwd?",o:["Als loon","Als werkloosheidsuitkering","Als ziekte-uitkering","Als vakantiegeld"],a:1,e:"Deze uitkering wordt beschouwd als een werkloosheidsuitkering; de werknemer mag daarom geen beroeps- of ander vervangingsinkomen genieten."},
+ {c:"h1",s:"1-4-1",q:"Vanaf wanneer bestaat de Europese aanvullende vakantie?",o:["1 januari 2012","1 april 2012","28 juni 2012","1 januari 2024"],a:1,e:"Vanaf 1 april 2012 is de “Europese aanvullende vakantie” bijgekomen (publicatie Belgisch Staatsblad 28/06/2012)."},
+ {c:"h1",s:"1-4-1",q:"Wie financiert de Europese aanvullende vakantie?",o:["De werkgever","De RVA","De werknemer zelf, via een voorafname op het dubbel vakantiegeld van het volgende jaar","De RJV via het debetbericht"],a:2,e:"Een systeem dat gefinancierd wordt door de werknemer zelf, door middel van een voorafname op het dubbel vakantiegeld van het volgende jaar."},
+ {c:"h1",s:"1-4-2",q:"Hoe lang is de aanloopperiode voor aanvullende vakantie?",o:["1 maand","3 maanden","6 maanden","12 maanden"],a:1,e:"Ten minste 3 maanden, al dan niet doorlopend bij één of meerdere werkgevers (= aanloopperiode)."},
+ {c:"h1",s:"1-4-2",q:"Iemand gaat zonder onderbreking van deeltijds naar voltijds werken. Hoe noemt de cursus dit?",o:["Hervatten van een activiteit","Aanvatten van een activiteit","Collectieve sluiting","Gelijkgestelde periode"],a:1,e:"Veranderen van arbeidsstelsel zonder de activiteit te onderbreken (bv. van deeltijds naar voltijds) valt onder het aanvatten van een activiteit."},
+ {c:"h1",s:"1-4-2",q:"Jan werkt na een periode in voltijds tijdskrediet opnieuw. Wat is dit?",o:["Aanvatten van een activiteit","Hervatten van een activiteit","Geen van beide","Jeugdvakantie"],a:1,e:"Opnieuw beginnen nadat de werknemer in voltijds tijdskrediet was, is het hervatten van een activiteit."},
+ {c:"h1",s:"1-4-2",tf:true,q:"Omdat het aanvullende vakantiegeld gefinancierd wordt met het dubbel vakantiegeld, wordt het niet als loon beschouwd en betaalt de werknemer er solidariteitsbijdragen op.",a:true,e:"Juist: het wordt niet als loon beschouwd en de werknemer zal daarvoor solidariteitsbijdragen moeten betalen."},
+ {c:"h1",s:"1-4-3",tf:true,q:"Een werknemer met jeugdvakantie kan kiezen om tijdens de collectieve sluiting RVA-uitkeringen te ontvangen in plaats van zijn jeugdvakantiedagen te gebruiken.",a:false,e:"Bij jeugdvakantie en seniorvakantie kan men niet opteren voor dit systeem: de werknemer moet zijn vakantiedagen gebruiken in het collectief verlof."},
+ // H2
+ {c:"h2",s:"2-1-1",q:"Wie berekent het aantal vakantiedagen voor arbeiders?",o:["De werkgever","De vakantiekas","De RVA","Het paritair comité"],a:1,e:"Het is de vakantiekas die het aantal vakantiedagen voor arbeiders zal berekenen. De werkgever past ze aan aan het arbeidsstelsel."},
+ {c:"h2",s:"2-1-1",q:"Waar staat de letter Q voor in de formule A × 5/R × Q/S?",o:["Totaal aantal gepresteerde en gelijkgestelde dagen","Gemiddeld aantal dagen per week volgens contract","Gemiddeld aantal uren per week volgens contract","Gemiddeld aantal uren per week van een voltijdse werknemer"],a:2,e:"Q = het gemiddeld aantal uren per week waarin de werknemer geacht wordt te werken op basis van zijn contract."},
+ {c:"h2",s:"2-1-1",q:"Waar staat de letter S voor in de formule?",o:["Aantal zaterdagen","Gemiddeld aantal uren per week van een voltijdse werknemer","Aantal schorsingsdagen","Standaard 5 dagen"],a:1,e:"S = het gemiddeld aantal uren per week waarin een voltijdse werknemer geacht wordt te werken."},
+ {c:"h2",s:"2-1-1",q:"De formule geeft 142,49. Welk getal neem je mee naar de tabel?",o:["142","143","142,5","141"],a:0,e:"Er wordt geen rekening gehouden met decimalen kleiner dan 50: 142,49 wordt 142."},
+ {c:"h2",s:"2-1-1",q:"De formule geeft 142,50. Welk getal neem je mee naar de tabel?",o:["142","143","142,5","140"],a:1,e:"Decimalen groter dan of gelijk aan 50 worden afgerond naar de hogere eenheid: 143."},
+ {c:"h2",s:"2-1-1",q:"Hoeveel vakantiedagen geeft 231 of meer dagen volgens de tabel?",o:["18","19","20","24"],a:2,e:"231 en meer → 20 wettelijke vakantiedagen."},
+ {c:"h2",s:"2-1-1",q:"Hoeveel vakantiedagen geven 160 dagen volgens de tabel?",o:["12","13","14","15"],a:1,e:"Van 154 tot 162 → 13 vakantiedagen."},
+ {c:"h2",s:"2-1-1",q:"Hoeveel vakantiedagen geven 9 dagen volgens de tabel?",o:["0","1","2","Afronden naar 1"],a:0,e:"Van 0 tot 9 → 0 vakantiedagen."},
+ {c:"h2",s:"2-1-2",q:"Voorbeeld uit de cursus: 125 dagen, 4 dagen/week, 28 u/week, bedrijf 38 u. Wat is het resultaat?",o:["115,13 → 115 → 9 vakantiedagen","125 → 10 vakantiedagen","92,11 → 92 → 7 vakantiedagen","156,25 → 156 → 13 vakantiedagen"],a:0,e:"125 × 5/4 × 28/38 = 115,13 → 115 dagen → volgens de tabel 9 vakantiedagen."},
+ {c:"h2",s:"2-1-3",q:"Hoe bepaal je de aanvullende “Europese” vakantiedagen van een arbeider?",o:["Vakantiedagen verworven in het lopende jaar min de gewone vakantiedagen op basis van het voorgaande jaar","Altijd 5 dagen","Gewone vakantiedagen × 2","Dagen van het vorige jaar plus 3 maanden"],a:0,e:"De verworven vakantiedagen van het lopende jaar worden verminderd met de gewone vakantiedagen op basis van het voorgaande jaar. Het (positieve) verschil zijn de aanvullende dagen."},
+ {c:"h2",s:"2-1-3",q:"Voorbeeld 2: een arbeider start op 1 april 2025 en werkte niet in 2024. Vanaf wanneer kan hij aanvullende vakantie opnemen?",o:["Vanaf 1 april 2025","Vanaf de laatste week van juni (laatste week van de aanloopperiode)","Pas in 2026","Vanaf 1 oktober 2025"],a:1,e:"Hij kan deze opnemen vanaf de laatste week van juni (= de laatste week van de aanloopperiode)."},
+ {c:"h2",s:"2-2-1",q:"Hoeveel vakantiedagen bouwt een bediende per maand op in de zesdagenweek?",o:["1,5 dag","1,67 dag","2 dagen","2,5 dagen"],a:2,e:"In een 6-dagenweek wordt de vakantieduur vastgesteld op 2 dagen per maand arbeid of gelijkgestelde onderbreking."},
+ {c:"h2",s:"2-2-1",q:"Hoe reken je vakantiedagen van een bediende om naar het vijfdagenstelsel?",o:["Delen door 6, maal 5, naar boven afronden","Per schijf van 6 vakantiedagen 1 dag in mindering brengen","2 dagen per maand min 1 per maand","Je hoeft niets om te rekenen"],a:1,e:"De omrekening naar een vijfdagenstelsel gebeurt door per schijf van 6 vakantiedagen 1 dag in mindering te brengen."},
+ {c:"h2",s:"2-2-2",q:"Een bediende werkt 5 maanden in het vijfdagenstelsel. Op hoeveel vakantiedagen heeft hij recht?",o:["8","9","10","12"],a:1,e:"5 × 2 = 10 dagen in zesdagenstelsel; per schijf van 6 dagen 1 dag minder: 10 − 1 = 9."},
+ {c:"h2",s:"2-2-1",tf:true,q:"De werkgever is verplicht prestaties van minder dan één volledige maand mee te tellen voor de vakantie van een bediende.",a:false,e:"De werkgever is niet verplicht rekening te houden met prestaties van minder dan één volledige maand. Een halve maand of meer als volledige maand tellen is een gunst van de werkgever."},
+ {c:"h2",s:"2-2-3",q:"Op hoeveel dagen aanvullende vakantie heeft een bediende in een vijfdagenstelsel recht na de aanloopperiode?",o:["3","5","6","10"],a:1,e:"Maximum 6 dagen in een zesdagenstelsel; in een vijfdagenstelsel 6 × 5/6 = 5 dagen."},
+ {c:"h2",s:"2-3-1",q:"Wie stelt de jaarlijkse vakantiedatums in de eerste plaats vast?",o:["De werkgever alleen","Het bevoegd paritair comité","De vakbond","De RJV"],a:1,e:"Eerst het bevoegd paritair comité; daarna de ondernemingsraad, een collectieve overeenkomst/akkoord met de syndicale afvaardiging, en tot slot een individuele overeenkomst."},
+ {c:"h2",s:"2-3-1",q:"Er is geen beslissing van het paritair comité. Wie stelt dan de vakantiedatums vast?",o:["De ondernemingsraad","De arbeidsrechtbank","De werknemer","De vakantiekas"],a:0,e:"Door de ondernemingsraad van de onderneming (wanneer er geen paritaire beslissing is genomen)."},
+ {c:"h2",s:"2-3-2",q:"Binnen welke termijn moeten vakantiedagen worden toegekend?",o:["Binnen 6 maanden na het einde van het vakantiedienstjaar","Binnen de twaalf maanden die volgen op het einde van het vakantiedienstjaar","Binnen 2 jaar","Binnen 3 maanden"],a:1,e:"De vakantiedagen moeten worden toegekend binnen de twaalf maanden die volgen op het einde van het vakantiedienstjaar."},
+ {c:"h2",s:"2-3-3",q:"Welke attesten heeft de werknemer nodig voor werkloosheidsvergoeding tijdens een collectieve sluiting?",o:["C103 en L 75","C3.2 werkgever, C3.2 werknemer en C3.2A controlekaart","Vakantieattest","C4"],a:1,e:"De attesten C3.2 werkgever, C3.2 werknemer en C3.2A controlekaart, ingevuld door de werkgever."},
+ {c:"h2",s:"2-3-3",tf:true,q:"Dagen werkloosheid tijdens de collectieve sluiting zijn gelijkgesteld voor de berekening van de verlofdagen het jaar erna.",a:false,e:"Deze dagen zijn niet gelijkgestelde dagen voor de berekening van zijn verlofdagen in het jaar erna."},
+ {c:"h2",s:"2-3-4",q:"Werknemer en werkgever zijn het niet eens over de vakantiedagen. Wie beslist?",o:["Het paritair comité","De arbeidsrechtbank","De RVA","De vakantiekas"],a:1,e:"Wanneer werknemer en werkgever het niet eens geraken over de vakantiedagen, neemt de arbeidsrechtbank een beslissing."},
+ {c:"h2",s:"2-3-5",q:"Nieuwe regeling vanaf 01/01/2024: een werknemer kon door ziekte zijn vakantie niet opnemen. Wat gebeurt er?",o:["De dagen vervallen zonder betaling","Hij ontvangt het vakantiegeld in december en heeft 2 jaar om de dagen onbetaald op te nemen","De dagen worden automatisch overgedragen met loon","Hij krijgt een dubbele ziekte-uitkering"],a:1,e:"Het vakantiegeld voor de niet-opgenomen dagen wordt in december betaald; de werknemer krijgt 2 jaar de tijd om die dagen onbetaald op te nemen."},
+ {c:"h2",s:"2-3-5",q:"Een werknemer is langdurig ziek sinds augustus 2024. Tot wanneer kan hij de niet-opgenomen dagen onbetaald opnemen?",o:["31/12/2024","31/12/2025","31/12/2026","31/12/2027"],a:2,e:"Hij ontvangt het bedrag in december 2024 en krijgt 2 jaar de tijd, dus tot 31/12/2026."},
+ {c:"h2",s:"2-3-6",q:"Welke werkloosheidsperiodes kunnen voor een arbeider gelijkgesteld worden met effectieve arbeidsprestaties?",o:["Alle werkloosheid","Enkel economische werkloosheid of werkloosheid door staking","Enkel volledige werkloosheid","Geen enkele"],a:1,e:"Alleen periodes van economische werkloosheid of werkloosheid als gevolg van staking."},
+ {c:"h2",s:"2-3-6",tf:true,q:"Bij een bediende worden dagen volledige werkloosheid als gelijkgestelde dagen beschouwd.",a:false,e:"De dagen volledige werkloosheid worden niet als gelijkgestelde dagen beschouwd. De bediende krijgt slechts vakantie volgens de duur van de tewerkstelling."},
+ // H3
+ {c:"h3",s:"3-0",q:"Uit welke twee delen bestaat het vakantiegeld?",o:["Bruto en netto","Enkelvoudig en dubbel vakantiegeld","Wettelijk en conventioneel","Vast en variabel"],a:1,e:"Het enkelvoudig vakantiegeld (loon dat overeenstemt met de vakantieduur) en het dubbel vakantiegeld (vergoeding naast het loon)."},
+ {c:"h3",s:"3-1-0",q:"Hoe financiert de werkgever het vakantiegeld van arbeiders?",o:["Rechtstreeks aan de arbeider","Indirect via de patronale RSZ-bijdragen","Via de RVA","Via een verzekering"],a:1,e:"Indirect via de patronale RSZ-bijdragen: 6 % per kwartaal (op 108 %) en 10,27 % via een jaarlijks debetbericht."},
+ {c:"h3",s:"3-1-0",q:"In welke maand betaalt de werkgever het jaarlijks debetbericht van 10,27 %?",o:["Januari","April","Juni","December"],a:1,e:"Door de werkgever te betalen in de maand april."},
+ {c:"h3",s:"3-1-1",q:"Hoeveel bedraagt het totale vakantiegeld van een arbeider?",o:["15,34 % van het loon","15,38 % van het loon verhoogd tot 108 %","92 % van een maandloon","7,67 % van het jaarloon"],a:1,e:"15,38 % van het loon van het vakantiedienstjaar verhoogd tot 108 %."},
+ {c:"h3",s:"3-1-1",q:"Hoe is de 15,38 % van een arbeider samengesteld?",o:["7,67 % + 7,67 % + 0,04 %","8 % + 6,8 % + 0,58 %","8 % + 7 % + 0,38 %","6 % + 8 % + 1,38 %"],a:1,e:"8 % enkel vakantiegeld, 6,8 % dubbel vakantiegeld en 0,58 % aanvullende vakantievergoeding."},
+ {c:"h3",s:"3-1-1",q:"Hoe wordt de 0,58 % van een arbeider ook genoemd?",o:["Solidariteitsbijdrage","Conventioneel dubbel vakantiegeld","Vertrekvakantiegeld","Werkbonus"],a:1,e:"De aanvullende vakantievergoeding wordt ook conventioneel dubbel vakantiegeld genoemd."},
+ {c:"h3",s:"3-1-2",q:"Wanneer betaalt de vakantiekas meestal het vakantiegeld van arbeiders uit?",o:["Januari – februari","Mei – juni","September – oktober","December"],a:1,e:"Dit gebeurt meestal in de loop van de maanden mei en juni."},
+ {c:"h3",s:"3-1-3",q:"Met welk formulier geeft een arbeider zijn bankrekeningnummer door aan de RJV?",o:["L 75","C103","C3.2","Vakantieattest"],a:0,e:"Via de website (“Mijn vakantierekening”) of via aanvraagformulier L 75."},
+ {c:"h3",s:"3-1-3",q:"Tot wanneer kan een arbeider een circulaire cheque aanvragen?",o:["Jaarlijks voor 31 maart, per brief","Eenmalig bij indiensttreding","Voor 30 juni","Op elk moment"],a:0,e:"Hij moet dit jaarlijks voor 31 maart per brief aanvragen (jaarlijks te hernieuwen)."},
+ {c:"h3",s:"3-1-3",tf:true,q:"De regels over betaling via overschrijving gelden ook voor alle sectorale verlofkassen.",a:false,e:"Deze werkwijze geldt alleen voor de RJV zelf; de sectorale verlofkassen beslissen zelf en autonoom over de manier van uitbetalen."},
+ {c:"h3",s:"3-1-4",q:"Hoeveel solidariteitsbijdrage wordt er ingehouden op het bruto-vakantiegeld van een arbeider?",o:["0,5 %","1 %","6 %","13,07 %"],a:1,e:"Op het volledige bedrag van het bruto-vakantiegeld wordt 1 % solidariteitsbijdrage ingehouden."},
+ {c:"h3",s:"3-1-4",q:"Waarom wordt er geen RSZ ingehouden op de 8 % enkel vakantiegeld van een arbeider?",o:["Omdat het vrijgesteld is","Omdat de RSZ reeds werd ingehouden bij de berekening van het loon","Omdat de werkgever ze betaalt","Omdat het onder € 1.700 ligt"],a:1,e:"Op 8 % enkel vakantiegeld: RSZ werd reeds ingehouden bij de berekening van het loon."},
+ {c:"h3",s:"3-1-4",q:"Welke bedrijfsvoorheffing geldt op belastbaar vakantiegeld van een arbeider tot € 1.700 (inkomsten 2025)?",o:["10,09 %","13,07 %","17,16 %","23,22 %"],a:2,e:"17,16 % tot € 1.700, 23,22 % daarboven."},
+ {c:"h3",s:"3-1-4",q:"Wat is het belastbaar vakantiegeld?",o:["Het bruto vakantiegeld","Bruto vakantiegeld min de solidariteitsinhouding en de inhouding op het dubbel vakantiegeld","Het netto vakantiegeld","Enkel het dubbel vakantiegeld"],a:1,e:"Belastbaar vakantiegeld = bruto vakantiegeld min de solidariteitsinhouding en de inhouding op het dubbel vakantiegeld."},
+ {c:"h3",s:"3-1-5",q:"Hoeveel bedraagt het aanvullend vakantiegeld van een arbeider?",o:["7,67 %","7,69 %","8 %","15,38 %"],a:1,e:"7,69 % van de lonen van de periode die recht geeft op aanvullende vakantie."},
+ {c:"h3",s:"3-1-5",q:"Een arbeider neemt 5 aanvullende vakantiedagen op in augustus. Wanneer worden ze uitbetaald?",o:["In augustus","In de loop van het vierde kwartaal","In mei-juni van het volgende jaar","In december"],a:1,e:"Ten laatste in de loop van het kwartaal volgend op het kwartaal waarin het recht ontstaat: vierde kwartaal."},
+ {c:"h3",s:"3-1-5",q:"Voor hoeveel komt het aanvullend vakantiegeld van een arbeider maximaal in mindering van het dubbel vakantiegeld van het volgende jaar?",o:["25 %","50 %","75 %","100 %"],a:1,e:"Ten belope van maximum 50 % van het vakantiegeld."},
+ {c:"h3",s:"3-2-1",q:"Hoeveel bedraagt het dubbel vakantiegeld van een bediende?",o:["15,38 % van het jaarloon","1/12 van 92 % van het loon van de maand van de hoofdvakantie, in verhouding tot de prestaties","85 % van het jaarloon","7,67 % van het jaarloon"],a:1,e:"Een toeslag van 1/12 van 92 % van het normale loon van de maand waarin de bediende zijn hoofdvakantie opneemt, in verhouding tot de gepresteerde/gelijkgestelde periode."},
+ {c:"h3",s:"3-2-1",q:"Waarvoor dient de 7 % in het dubbel vakantiegeld van een bediende?",o:["Voor de eerste week vakantie","Conventioneel dubbel voor de 3de, 4de en 5de dag van de vierde vakantieweek","Voor de aanvullende Europese vakantie","Als solidariteitsbijdrage"],a:1,e:"Een aanvullende vergoeding van 7 %: conventioneel dubbel voor de derde, vierde en vijfde dag van de vierde vakantieweek."},
+ {c:"h3",s:"3-2-2",tf:true,q:"Het vakantiegeld van bedienden wordt via de RJV uitbetaald.",a:false,e:"Het vakantiegeld voor bedienden is een zaak tussen werkgever en werknemer; het wordt rechtstreeks door de werkgever geregeld."},
+ {c:"h3",s:"3-2-3",q:"Wanneer moet het dubbel vakantiegeld van een bediende uiterlijk betaald worden?",o:["Op 31 december","Ten laatste op het ogenblik dat de hoofdvakantie genomen wordt","In mei","Bij de eerste vakantiedag van het jaar"],a:1,e:"Het dubbel vakantiegeld moet ten laatste uitbetaald worden op het ogenblik dat de hoofdvakantie genomen wordt."},
+ {c:"h3",s:"3-2-4",q:"Welke inhouding geldt op het 85 %-deel van het dubbel vakantiegeld van een bediende?",o:["Normale RSZ 13,07 % en BBSZ","Bijzondere bijdrage dubbel vakantiegeld van 13,07 %","Geen","1 % solidariteitsbijdrage"],a:1,e:"Bijzondere Bijdrage Dubbel Vakantiegeld van 13,07 %, enkel verschuldigd door de werknemer; voor de werkgever vrij van sociale lasten."},
+ {c:"h3",s:"3-2-4",tf:true,q:"Het 7 % aanvullend dubbel vakantiegeld van een bediende is vrijgesteld van BBDV.",a:true,e:"Juist: het 7 % aanvullend dubbel vakantiegeld is vrijgesteld van BBDV."},
+ {c:"h3",s:"3-2-4",q:"Welke bedrijfsvoorheffing geldt op het enkel vakantiegeld van een bediende?",o:["De speciale tarieven voor vakantiegeld","De gewone regeling zoals bij de maandwedde","10,09 %","Geen"],a:1,e:"Gewone regeling zoals bij de maandwedde; dubbel en aanvullend dubbel vakantiegeld volgen de speciale tarieven."},
+ {c:"h3",s:"3-2-5",q:"Welke RSZ is verschuldigd op het aanvullend vakantiegeld van een bediende?",o:["Werknemers- én patronale RSZ","Enkel een RSZ-werknemersbijdrage","Geen RSZ","Enkel patronale RSZ"],a:1,e:"Op dit loon zal enkel een RSZ-werknemersbijdrage (en geen patronale RSZ) verschuldigd zijn."},
+ // H4
+ {c:"h4",s:"4-0",q:"Voor welke werknemers geldt het vertrekvakantiegeld zoals in hoofdstuk 4 beschreven?",o:["Arbeiders","Bedienden","Uitzendkrachten alleen","Zelfstandigen"],a:1,e:"Wanneer de arbeidsovereenkomst van de bediende eindigt, moet de werkgever het vakantiegeld vervroegd betalen."},
+ {c:"h4",s:"4-0",q:"In welke situatie wordt, naast het einde van de overeenkomst, ook vertrekvakantiegeld berekend?",o:["Bij een loonsverhoging","Bij een nieuwe overeenkomst met dezelfde werkgever waarin de arbeidsduur vermindert","Bij promotie","Bij een verhuizing"],a:1,e:"Ook bij een nieuwe arbeidsovereenkomst waarin de arbeidsduur vermindert, en bij langdurige arbeidsongeschiktheid op het einde van het jaar."},
+ {c:"h4",s:"4-1",q:"Hoeveel bedraagt het vertrekvakantiegeld?",o:["15,38 %","15,34 % (7,67 % enkel + 7,67 % dubbel)","92 %","8 % + 6,8 %"],a:1,e:"15,34 % (= 7,67 % enkel vakantiegeld en 7,67 % dubbel vakantiegeld) van de loonmassa."},
+ {c:"h4",s:"4-1",q:"Wat verstaat de cursus onder loonmassa?",o:["Het nettoloon","Alle vormen van bezoldigingen die onderworpen zijn aan sociale zekerheidsbijdragen","Enkel het basisloon","Het loon verhoogd tot 108 %"],a:1,e:"Loonmassa = alle vormen van bezoldigingen die onderworpen zijn aan sociale zekerheidsbijdragen."},
+ {c:"h4",s:"4-1",q:"Voorbeeld: recht op 24 dagen, al 8 opgenomen, dubbel nog niet betaald. Wat is het enkel vakantiegeld voor het vorige vakantiedienstjaar?",o:["7,67 %","8/24 × 7,67 %","16/24 × 7,67 %","15,34 %"],a:2,e:"Voor de 16 nog niet opgenomen dagen: 16/24 × 7,67 % van de bezoldigingen van 200x-1."},
+ {c:"h4",s:"4-1",tf:true,q:"Het dubbel vakantiegeld voor het vorige vakantiedienstjaar wordt enkel betaald als de werknemer het grootste deel van zijn vakantie nog niet genomen heeft.",a:true,e:"Juist: het dubbel vakantiegeld zal enkel betaald worden indien de werknemer het grootste deel van zijn vakantie nog niet genomen heeft."},
+ {c:"h4",s:"4-1",q:"Waarvoor dient de 15,34 % op het lopende vakantiedienstjaar?",o:["Als ontslagvergoeding","Als voorafbetaling van de vakantie die het volgende jaar genomen moet worden","Als eindejaarspremie","Als werkbonus"],a:1,e:"Deze laatste vergoeding dient tot voorafbetaling van de vakantie die het volgende jaar genomen moet worden."},
+ {c:"h4",s:"4-2-1",q:"Welke inhouding geldt op het enkel vertrekvakantiegeld (7,67 %)?",o:["BBDV 13,07 %","RSZ 13,07 %, geen werkbonus","Geen inhoudingen","1 % solidariteit"],a:1,e:"Enkel vakantiegeld 7,67 %: RSZ 13,07 %, GEEN werkbonus."},
+ {c:"h4",s:"4-2-1",q:"Welk deel van het vertrekvakantiegeld kent geen inhoudingen?",o:["Enkel vakantiegeld 7,67 %","Dubbel vakantiegeld 6,80 %","Aanvullend dubbel vakantiegeld 0,87 %","Geen enkel deel"],a:2,e:"Aanvullend dubbel vakantiegeld 0,87 %: geen inhoudingen."},
+ {c:"h4",s:"4-2-2",tf:true,q:"In de uitzendsector wordt er geen RSZ op het enkel vakantiegeld gerekend bij uitdiensttreding.",a:true,e:"Juist, in tegenstelling tot bij gewone werkgevers."},
+ {c:"h4",s:"4-2-2",q:"Hoeveel keer mag de werkbonus op jaarbasis maximaal toegepast worden?",o:["1 maal","4 maal","12 maal","13 maal"],a:2,e:"Maximaal 12 maal, zijnde de 12 maanden van het jaar. De verrekening gebeurt door de volgende werkgever."},
+ {c:"h4",s:"4-3",q:"Wanneer moet een werkgever een vakantieattest afleveren?",o:["Bij elke wijziging van het arbeidsregime","Alleen als de arbeidsovereenkomst van de bediende eindigt","Elk jaar in december","Op vraag van de RJV"],a:1,e:"Een vakantieattest moet alleen verstrekt worden als de arbeidsovereenkomst van de bediende eindigt, niet bij een verandering van arbeidsregime."},
+ {c:"h4",s:"4-3",q:"Hoeveel vakantieattesten worden er meestal afgeleverd?",o:["1","2","3","4"],a:1,e:"Meestal 2: voor het lopende vakantiejaar (dit kalenderjaar) en voor het lopende vakantiedienstjaar (volgend kalenderjaar)."},
+ {c:"h4",s:"4-3",q:"Welk gegeven moet NIET op het vakantieattest volgens de cursus?",o:["De periode dat de bediende in dienst was","De brutobedragen van enkel en dubbel vakantiegeld","Het aantal opgenomen dagen aanvullende vakantie","Het rijksregisternummer van de nieuwe werkgever"],a:3,e:"De cursus somt o.a. de periode in dienst, de arbeidsduur, de brutobedragen, de RSZ-bijdragen, opgenomen dagen en arbeidsstelsel, en de gegevens over aanvullende vakantie op. Gegevens over de nieuwe werkgever staan niet in de lijst."},
+ {c:"h4",s:"4-4",q:"Sinds 2024: een bediende neemt een vakantiedag op basis van een vakantieattest van de vorige werkgever. Hoeveel van het bruto dagloon ontvangt hij van de nieuwe werkgever?",o:["0 %","10 %","50 %","90 %"],a:1,e:"De nieuwe werkgever trekt 90 % af van het bruto dagloon; de bediende ontvangt dus slechts 10 %."},
+ {c:"h4",s:"4-4",q:"Wanneer gebeurt de correctie (stap 2) bij de nieuwe werkgever?",o:["Elk kwartaal","In december of in de maand van uitdiensttreding","Bij de hoofdvakantie","In april"],a:1,e:"In december of in de maand van uitdiensttreding wordt eventueel een correctie aangebracht."},
+ {c:"h4",s:"4-4",q:"Hoeveel mag de werkgever maximaal inhouden bij regularisatie van te veel betaald enkel vakantiegeld?",o:["1/3 van het brutoloon","1/5 van het loon na fiscale en sociale inhoudingen","Het volledige bedrag in één keer","10 % van het loon"],a:1,e:"Volgens de wet op de bescherming van het loon 1/5 van het loon (na aftrek van fiscale en sociale inhoudingen); daarboven gespreid over twee maanden, tenzij de werknemer akkoord gaat met een eenmalige inhouding."},
+ {c:"h4",s:"4-4",tf:true,q:"Door de nieuwe regeling van 2024 wordt ook het dubbel vakantiegeld per opgenomen dag verrekend.",a:false,e:"Aan de verrekening van het dubbel vakantiegeld verandert niets: dit gebeurt nog steeds in één keer."},
+ {c:"h4",s:"4-5",q:"Wanneer wordt vertrekvakantiegeld afgerekend bij een vermindering van de arbeidsprestaties (bv. halftijds tijdskrediet)?",o:["Onmiddellijk","In december","Bij de hoofdvakantie","Bij het einde van de overeenkomst"],a:1,e:"In december: 7,67 % enkel en 7,67 % dubbel vertrekvakantiegeld voor de niet-opgenomen dagen."},
+ {c:"h4",s:"4-5",tf:true,q:"Bij opname van voltijds ouderschapsverlof wordt vertrekvakantiegeld uitbetaald.",a:false,e:"Bij opname van voltijds thematisch verlof (ouderschapsverlof, verlof medische bijstand en palliatief verlof) wordt GEEN vakantiegeld uitbetaald."},
+ {c:"h4",s:"4-5",q:"Wat wordt betaald als vakantie onmogelijk kon worden opgenomen door een niet voorziene schorsing (bv. ziekte)?",o:["15,34 % van het jaarloon","Het normale loon op basis van het loon van december (+ eventueel een supplement dubbel vakantiegeld)","Niets","Een RVA-uitkering"],a:1,e:"In december: het normale loon op basis van het loon van december (+ eventueel een supplement dubbel vakantiegeld)."}
+];
+
+/* Sorteeroefening gelijkgesteld */
+const SORT = [
+ ["Klein verlet",true],["Familiaal verlof of verlof om dringende redenen",false],["Staking",true],["Technische stoornis",false],
+ ["Zwangerschapsrust",true],["Ouderschapsverlof",false],["Lock-out",true],["Ongerechtvaardigde afwezigheid",false],
+ ["Adoptieverlof",true],["Periode van verbrekingsvergoeding",false],["Pleegzorgverlof",true],["Volledige schorsing wegens tijdskrediet",false],
+ ["Betaald educatief verlof / Vlaams opleidingsverlof",true],["Weerverlet",false],["Tijdelijke werkloosheid om economische redenen",true],["Palliatief verlof",false],
+ ["De eerste 12 maanden ziekte",true],["Zorgverlof (verzorging zwaar ziek familielid)",false],["Vaderschapsverlof",true],["Volledige schorsing wegens loopbaanonderbreking",false]
+];
+
+/* Vergelijking arbeider / bediende */
+const CMP = [
+ ["Wie berekent het aantal vakantiedagen?","De vakantiekas (de werkgever past ze aan aan het arbeidsstelsel)","De werkgever","2-1-1"],
+ ["Basis van de berekening","Aantal gewerkte en gelijkgestelde dagen: formule A × 5/R × Q/S en tabel","Aantal gewerkte maanden: 2 dagen per maand (zesdagenweek), per schijf van 6 dagen 1 dag minder in de vijfdagenweek","2-2-1"],
+ ["Maximum","20 dagen (vanaf 231 dagen)","24 dagen (6-dagenweek) / 20 dagen (5-dagenweek)","2-2-1"],
+ ["Aanvullende (Europese) vakantie","Na de aanloopperiode: dagen van het lopende jaar volgens de tabel min de gewone vakantiedagen","Vanaf de laatste week van de aanloopperiode max. 6 dagen (6-dagenstelsel) of 5 dagen (5-dagenstelsel), daarna 2 dagen per maand (6-dagenstelsel)","2-2-3"],
+ ["Werkloosheid in het vakantiedienstjaar","Alleen economische werkloosheid of werkloosheid door staking kan gelijkgesteld worden","Dagen volledige werkloosheid zijn niet gelijkgesteld","2-3-6"],
+ ["Wie betaalt het vakantiegeld?","De vakantiekas (RJV of ander vakantiefonds); werkgever financiert indirect via RSZ (6 % per kwartaal + 10,27 % debetbericht)","Rechtstreeks de werkgever","3-2-2"],
+ ["Bedrag","15,38 % van het loon verhoogd tot 108 %: 8 % enkel + 6,8 % dubbel + 0,58 % aanvullend","Enkel: normaal loon doorbetaald. Dubbel: 1/12 van 92 % (85 % + 7 %) van het loon van de maand van de hoofdvakantie","3-2-1"],
+ ["Wanneer betaald?","Meestal mei en juni, via overschrijving (of circulaire cheque, aan te vragen voor 31 maart)","Enkel: op de gewone loondatum. Dubbel: ten laatste bij de hoofdvakantie","3-2-3"],
+ ["Sociale inhoudingen enkel vakantiegeld","RSZ werd reeds ingehouden bij de berekening van het loon","Normale RSZ 13,07 % en BBSZ; werkgever betaalt normale patronale lasten","3-2-4"],
+ ["Sociale inhoudingen dubbel vakantiegeld","13,07 % bijzondere bijdrage op 6,8 %; 0,58 % vrij; 1 % solidariteitsbijdrage op het volledige bruto-vakantiegeld","BBDV 13,07 % op het 85 %-deel (enkel werknemer); 7 % vrijgesteld","3-1-4"],
+ ["Bedrijfsvoorheffing","17,16 % tot € 1.700, 23,22 % daarboven (inkomsten 2025) op het belastbaar vakantiegeld","Enkel: gewone regeling maandwedde. Dubbel en aanvullend dubbel: speciale tarieven vakantiegeld","3-2-4"],
+ ["Aanvullend vakantiegeld","7,69 % van de lonen, via RJV, uiterlijk in het kwartaal na het ontstaan van het recht; max. 50 % in mindering van het dubbel vakantiegeld volgend jaar","Normaal loon op de gewone loondatum, enkel RSZ-werknemersbijdrage; in mindering van het dubbel vakantiegeld volgend jaar of bij vertrekvakantiegeld","3-2-5"],
+ ["Bij uitdiensttreding","—","Vertrekvakantiegeld 15,34 % (7,67 % + 7,67 %) en vakantieattest","4-1"]
+];
+
+/* =========================================================
+   HULPFUNCTIES & STATUS
+   ========================================================= */
+const $ = (s,el=document)=>el.querySelector(s);
+const $$ = (s,el=document)=>[...el.querySelectorAll(s)];
+const ALLSEC = CH.flatMap(ch=>ch.sections.map(s=>({...s,ch})));
+const secById = id => ALLSEC.find(s=>s.id===id);
+const chById = id => CH.find(c=>c.id===id);
+const eur = n => "€ " + n.toLocaleString("nl-BE",{minimumFractionDigits:2,maximumFractionDigits:2});
+const nl = (n,d=2) => n.toLocaleString("nl-BE",{minimumFractionDigits:d,maximumFractionDigits:d});
+const esc = s => String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const strip = h => h.replace(/<[^>]+>/g," ").replace(/&amp;/g,"&").replace(/\s+/g," ").trim();
+const norm = s => s.toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g,"");
+const shuffle = a => { a=[...a]; for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];} return a; };
+
+const store = {
+  get(k,def){ try{ const v=localStorage.getItem("jv25:"+k); return v?JSON.parse(v):def; }catch(e){ return def; } },
+  set(k,v){ try{ localStorage.setItem("jv25:"+k,JSON.stringify(v)); }catch(e){} }
+};
+const state = {
+  read: new Set(store.get("read",[])),
+  known: new Set(store.get("known",[])),
+  best: store.get("best",{}),
+  last: store.get("last",null),
+  view: "home",
+  sec: ALLSEC[0].id
+};
+const saveRead = ()=>store.set("read",[...state.read]);
+
+function dayLookup(n){ return DAYTABLE.find(([lo,hi])=>n>=lo && n<=hi); }
+function roundRule(x){ const v=Math.round(x*100)/100; const fl=Math.floor(v); return (v-fl)>=0.5-1e-9 ? fl+1 : fl; }
+
+/* =========================================================
+   NAVIGATIE
+   ========================================================= */
+function show(view, opts={}){
+  state.view = view;
+  $$("[data-v]").forEach(s=>s.hidden = s.id!=="v-"+view);
+  $$(".tab").forEach(t=>t.setAttribute("aria-selected", t.dataset.view===view ? "true":"false"));
+  if(view==="home") renderHome();
+  if(view==="learn") renderSection(opts.sec || state.sec, opts.hl);
+  if(view==="quiz" && !opts.keep) renderQuizSetup();
+  if(view!=="search" && !opts.noScroll) window.scrollTo({top:0});
+  try{ if(view!=="search") history.replaceState(null,"","#"+(view==="learn"?"s"+state.sec:view)); }catch(e){}
+}
+$$(".tab").forEach(t=>t.addEventListener("click",()=>show(t.dataset.view)));
+$("#brand").addEventListener("click",()=>show("home"));
+document.addEventListener("click",e=>{
+  const g=e.target.closest("[data-go]"); if(g){ show(g.dataset.go); return; }
+  const r=e.target.closest("[data-sec]"); if(r){ e.preventDefault(); show("learn",{sec:r.dataset.sec}); }
+});
+
+/* =========================================================
+   START
+   ========================================================= */
+function renderHome(){
+  const total = ALLSEC.length, done = ALLSEC.filter(s=>state.read.has(s.id)).length;
+  const bestVals = Object.values(state.best);
+  const bestAll = state.best.all!=null ? state.best.all+"%" : (bestVals.length? Math.max(...bestVals)+"%" : "—");
+  $("#stats").innerHTML = `
+    <div class="stat"><div class="v">${done}<span style="font-size:.9rem;color:var(--ink-soft)">/${total}</span></div><div class="l">onderdelen gelezen</div><div class="bar"><i style="width:${Math.round(done/total*100)}%"></i></div></div>
+    <div class="stat"><div class="v">${state.known.size}<span style="font-size:.9rem;color:var(--ink-soft)">/${TERMS.length}</span></div><div class="l">begrippen gekend</div><div class="bar"><i style="width:${Math.round(state.known.size/TERMS.length*100)}%"></i></div></div>
+    <div class="stat"><div class="v">${Q.length}</div><div class="l">quizvragen beschikbaar</div></div>
+    <div class="stat"><div class="v">${bestAll}</div><div class="l">beste quizscore</div></div>`;
+  $("#chapgrid").innerHTML = CH.map(ch=>{
+    const n=ch.sections.length, d=ch.sections.filter(s=>state.read.has(s.id)).length;
+    return `<button class="chapcard" type="button" data-sec="${ch.sections[0].id}">
+      <span class="k">HOOFDSTUK ${ch.nr} · p. ${ch.page}</span><h3>${ch.title}</h3><p>${ch.blurb}</p>
+      <span class="note">${d}/${n} onderdelen gelezen</span><div class="bar" style="width:100%"><i style="width:${Math.round(d/n*100)}%"></i></div></button>`;
+  }).join("");
+  const r=$("#resume");
+  if(state.last && secById(state.last)){ r.hidden=false; r.textContent="Ga verder: "+secById(state.last).nr+" "+secById(state.last).title; r.onclick=()=>show("learn",{sec:state.last}); } else r.hidden=true;
+}
+
+/* =========================================================
+   THEORIE
+   ========================================================= */
+function renderToc(){
+  $("#toc").innerHTML = CH.map(ch=>`<details ${ch.sections.some(s=>s.id===state.sec)?"open":""}><summary><span class="k">H${ch.nr}</span>${ch.title}</summary>
+    ${ch.sections.map(s=>`<a href="#s${s.id}" data-sec="${s.id}" class="${s.id===state.sec?"on":""}"><span class="k">${s.nr}</span><span>${s.title}</span>${state.read.has(s.id)?'<span class="ck" aria-label="gelezen">✓</span>':""}</a>`).join("")}</details>`).join("");
+  $("#tocsel").innerHTML = CH.map(ch=>`<optgroup label="Hoofdstuk ${ch.nr} – ${ch.title}">${ch.sections.map(s=>`<option value="${s.id}" ${s.id===state.sec?"selected":""}>${s.nr} ${s.title}${state.read.has(s.id)?" ✓":""}</option>`).join("")}</optgroup>`).join("");
+}
+$("#tocsel").addEventListener("change",e=>show("learn",{sec:e.target.value}));
+
+function renderSection(id, hl){
+  const s = secById(id) || ALLSEC[0];
+  state.sec = s.id; state.last = s.id; store.set("last",s.id);
+  const idx = ALLSEC.indexOf(s), prev = ALLSEC[idx-1], next = ALLSEC[idx+1];
+  const isRead = state.read.has(s.id);
+  $("#article").innerHTML = `
+    <div class="crumbs"><span>Hoofdstuk ${s.ch.nr}</span><span>›</span><span>${s.ch.title}</span><span class="pg">cursus p. ${s.page}</span></div>
+    <h2><span class="k">${s.nr}</span>${s.title}</h2>
+    <div class="prose">${s.html}</div>
+    <div class="row" style="margin-top:24px">
+      <button class="btn readbtn" id="readbtn" type="button" aria-pressed="${isRead}">${isRead?"✓ Gelezen":"Markeer als gelezen"}</button>
+      <button class="btn" id="secquiz" type="button">Oefen vragen over hoofdstuk ${s.ch.nr}</button>
+    </div>
+    <div class="navfoot">
+      ${prev?`<button class="btn" type="button" data-sec="${prev.id}">← ${prev.nr} ${prev.title}</button>`:"<span></span>"}
+      ${next?`<button class="btn primary" type="button" data-sec="${next.id}" data-markread="1">${next.nr} ${next.title} →</button>`:`<button class="btn primary" type="button" data-go="quiz">Naar de quiz →</button>`}
+    </div>`;
+  $("#readbtn").onclick = ()=>{ if(state.read.has(s.id)) state.read.delete(s.id); else state.read.add(s.id); saveRead(); renderSection(s.id); };
+  $("#secquiz").onclick = ()=>{ show("quiz",{keep:true}); startQuiz({chapters:[s.ch.id],n:10}); };
+  const nb = $("[data-markread]",$("#article")); if(nb) nb.addEventListener("click",()=>{ state.read.add(s.id); saveRead(); },{capture:true});
+  renderToc();
+  initWidgets(s.id);
+  if(hl) highlightIn($("#article .prose"), hl);
+  try{ history.replaceState(null,"","#s"+s.id); }catch(e){}
+}
+
+function highlightIn(root, term){
+  const t = norm(term); if(!t) return;
+  const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT);
+  const nodes=[]; while(walker.nextNode()) nodes.push(walker.currentNode);
+  let first=null;
+  nodes.forEach(n=>{
+    const txt=n.nodeValue, low=norm(txt); let i=low.indexOf(t); if(i<0) return;
+    const frag=document.createDocumentFragment(); let pos=0;
+    while(i>=0){ frag.append(txt.slice(pos,i)); const m=document.createElement("mark"); m.textContent=txt.slice(i,i+t.length); frag.append(m); if(!first) first=m; pos=i+t.length; i=low.indexOf(t,pos); }
+    frag.append(txt.slice(pos)); n.parentNode.replaceChild(frag,n);
+  });
+  if(first) setTimeout(()=>first.scrollIntoView({block:"center",behavior:"smooth"}),60);
+}
+
+/* interactieve elementen in de theorie */
+let sortIdx=0, sortOk=0, sortN=0, sortDeck=shuffle(SORT);
+function initWidgets(id){
+  if(id==="1-1-2"){
+    const f=()=>{ const y=parseInt($("#yr").value,10); if(!y){ $("#yrout").textContent=""; return; }
+      $("#yrout").innerHTML=`Wie in <b>${y}</b> werkt, bouwt vakantie op in <b>vakantiedienstjaar ${y}</b> en neemt die op in <b>vakantiejaar ${y+1}</b>.<br>Het kalenderjaar ${y} is tegelijk vakantiejaar ${y} (voor dienstjaar ${y-1}) én vakantiedienstjaar ${y} (voor vakantiejaar ${y+1}).`; };
+    $("#yr").addEventListener("input",f); f();
+  }
+  if(id==="1-1-3"){
+    const ask=()=>{ if(sortIdx>=sortDeck.length){ sortDeck=shuffle(SORT); sortIdx=0; } $("#sortq").innerHTML=`<b>${sortDeck[sortIdx][0]}</b>`; $("#sortscore").textContent= sortN? `${sortOk}/${sortN} juist`:""; };
+    const ans=(v)=>{ const [name,eq]=sortDeck[sortIdx]; sortN++; const ok=(v===eq); if(ok) sortOk++;
+      $("#sortfb").innerHTML = (ok?'<span style="color:var(--good);font-weight:600">Juist.</span> ':'<span style="color:var(--bad);font-weight:600">Fout.</span> ')+`${esc(name)} is ${eq?"<b>wel</b>":"<b>niet</b>"} gelijkgesteld.`;
+      sortIdx++; ask(); };
+    $("#sortyes").onclick=()=>ans(true); $("#sortno").onclick=()=>ans(false); ask();
+  }
+  if(id==="1-2-2"){
+    const f=()=>{ const all=$$("#jvcheck input").every(i=>i.checked); $("#jvout").innerHTML= all? '<span style="color:var(--good)">Aan alle voorwaarden uit de cursus is voldaan: recht op jeugdvakantie.</span>':'<span style="color:var(--ink-soft)">Nog niet aan alle voorwaarden voldaan.</span>'; };
+    $$("#jvcheck input").forEach(i=>i.addEventListener("change",f)); f();
+  }
+  if(id==="2-1-1"){
+    $("#daytable").innerHTML = `<tr><th>Totaal aantal gepresteerde arbeidsdagen en gelijkgestelde inactiviteitsdagen</th><th class="num">Aantal wettelijke vakantiedagen (voltijds vijfdagenweekstelsel)</th></tr>` +
+      DAYTABLE.map(([lo,hi,d],i)=>`<tr data-i="${i}"><td class="mono">${hi===Infinity?`${lo} en meer`:`van ${lo} tot ${hi}`}</td><td class="num mono"><b>${d}</b></td></tr>`).join("");
+    const f=()=>{ const n=parseInt($("#tlk").value,10); $$("#daytable tr").forEach(r=>r.classList.remove("hit")); if(isNaN(n)||n<0){ $("#tlkout").textContent=""; return; }
+      const i=DAYTABLE.findIndex(([lo,hi])=>n>=lo&&n<=hi); $(`#daytable tr[data-i="${i}"]`).classList.add("hit"); $("#tlkout").innerHTML=`${n} dagen → <span class="mk">${DAYTABLE[i][2]} wettelijke vakantiedagen</span>`; };
+    $("#tlk").addEventListener("input",f); f();
+  }
+  if(id==="2-2-2"){
+    const f=()=>{ let m=parseInt($("#bdm").value,10); if(isNaN(m)){ $("#bdmout").textContent=""; return; } m=Math.max(0,Math.min(12,m));
+      const d6=m*2, d5=d6-Math.floor(d6/6);
+      $("#bdmout").innerHTML=`Zesdagenstelsel: ${m} × 2 = <b>${d6}</b> dagen. Per schijf van 6 dagen 1 dag minder: ${d6} − ${Math.floor(d6/6)} = <span class="mk">${d5} dagen</span> in het vijfdagenstelsel.`; };
+    $("#bdm").addEventListener("input",f); f();
+  }
+  if(id==="2-2-3"){
+    const rows=$$("#bdtl tr").slice(1); let k=rows.length;
+    $("#bdstep").onclick=()=>{ k = k>=rows.length?1:k+1; rows.forEach((r,i)=>{ r.style.opacity = i<k?1:.25; r.classList.toggle("hit", i===k-1); }); $("#bdstepinfo").textContent = `Stand na ${rows[k-1].cells[0].textContent}: ${rows[k-1].cells[2].textContent}`; };
+  }
+}
+
+/* =========================================================
+   BEGRIPPEN
+   ========================================================= */
+let glChap="all";
+function renderTerms(){
+  $("#glchips").innerHTML = [["all","Alle"],...CH.map(c=>[c.id,"H"+c.nr+" "+c.title])].map(([k,l])=>`<button class="chip" type="button" data-gl="${k}" aria-pressed="${glChap===k}">${l}</button>`).join("");
+  const q=norm($("#glq").value.trim());
+  const list = TERMS.filter(t=>(glChap==="all"||t.c===glChap) && (!q || norm(t.t+" "+t.d).includes(q))).sort((a,b)=>a.t.localeCompare(b.t,"nl"));
+  let L=""; $("#gllist").innerHTML = list.length ? list.map(t=>{ const l=t.t[0].toUpperCase(); const head = l!==L ? `<div class="letter">${L=l}</div>`:""; const s=secById(t.s);
+    return head+`<div class="term"><h3>${esc(t.t)} ${state.known.has(t.t)?'<span class="chip" style="font-size:.7rem;padding:1px 8px;vertical-align:middle">gekend</span>':""}</h3><p>${esc(t.d)}</p><button class="src" type="button" data-sec="${t.s}">Lees ${s.nr} ${esc(s.title)} (p. ${s.page})</button></div>`; }).join("")
+    : `<p class="lead">Geen begrippen gevonden voor “${esc($("#glq").value)}”.</p>`;
+}
+$("#glq").addEventListener("input",renderTerms);
+$("#glchips").addEventListener("click",e=>{ const b=e.target.closest("[data-gl]"); if(b){ glChap=b.dataset.gl; renderTerms(); } });
+
+/* =========================================================
+   FLASHCARDS
+   ========================================================= */
+let fc = { chap:"all", deck:[], i:0, onlyUnknown:false };
+function buildDeck(){ fc.deck = TERMS.filter(t=>(fc.chap==="all"||t.c===fc.chap) && (!fc.onlyUnknown || !state.known.has(t.t))); fc.i=0; }
+function renderFlash(){
+  $("#fcchips").innerHTML = [["all","Alle begrippen"],...CH.map(c=>[c.id,"H"+c.nr+" "+c.title])].map(([k,l])=>`<button class="chip" type="button" data-fc="${k}" aria-pressed="${fc.chap===k}">${l}</button>`).join("");
+  $("#fconly").setAttribute("aria-pressed",fc.onlyUnknown);
+  const card=$("#card"); card.classList.remove("flip");
+  if(!fc.deck.length){ $("#fcfront").textContent="Alles gekend!"; $("#fcch").textContent=""; $("#fcback").innerHTML="Er zijn geen kaarten meer in deze selectie. Zet de filter uit of wis je markeringen."; $("#fcinfo").textContent=""; return; }
+  const t=fc.deck[fc.i]; const s=secById(t.s);
+  $("#fcch").textContent = "Hoofdstuk "+chById(t.c).nr+" · "+chById(t.c).title;
+  $("#fcfront").textContent = t.t;
+  $("#fcback").innerHTML = `<p style="margin:0 0 10px">${esc(t.d)}</p><span class="note">Bron: ${s.nr} ${esc(s.title)} · p. ${s.page}</span>`;
+  $("#fcinfo").textContent = `Kaart ${fc.i+1} van ${fc.deck.length} · ${state.known.size} van ${TERMS.length} begrippen gekend`;
+}
+$("#card").addEventListener("click",()=>$("#card").classList.toggle("flip"));
+$("#fcchips").addEventListener("click",e=>{ const b=e.target.closest("[data-fc]"); if(b){ fc.chap=b.dataset.fc; buildDeck(); renderFlash(); } });
+$("#fcnext").onclick=()=>{ if(fc.deck.length){ fc.i=(fc.i+1)%fc.deck.length; renderFlash(); } };
+$("#fcprev").onclick=()=>{ if(fc.deck.length){ fc.i=(fc.i-1+fc.deck.length)%fc.deck.length; renderFlash(); } };
+$("#fcyes").onclick=()=>{ if(!fc.deck.length) return; state.known.add(fc.deck[fc.i].t); store.set("known",[...state.known]);
+  if(fc.onlyUnknown){ fc.deck.splice(fc.i,1); if(fc.i>=fc.deck.length) fc.i=0; } else fc.i=(fc.i+1)%fc.deck.length; renderFlash(); };
+$("#fcno").onclick=()=>{ if(!fc.deck.length) return; const t=fc.deck[fc.i]; state.known.delete(t.t); store.set("known",[...state.known]);
+  const pos=Math.min(fc.deck.length, fc.i+3); fc.deck.splice(fc.i,1); fc.deck.splice(pos-1,0,t); if(fc.deck[fc.i]===t && fc.deck.length>1) fc.i=(fc.i+1)%fc.deck.length; renderFlash(); };
+$("#fcshuffle").onclick=()=>{ fc.deck=shuffle(fc.deck); fc.i=0; renderFlash(); };
+$("#fconly").onclick=()=>{ fc.onlyUnknown=!fc.onlyUnknown; buildDeck(); renderFlash(); };
+$("#fcreset").onclick=()=>{ state.known.clear(); store.set("known",[]); buildDeck(); renderFlash(); };
+document.addEventListener("keydown",e=>{
+  if(state.view!=="flash" || e.target.matches("input,select,textarea")) return;
+  if(e.key===" "){ e.preventDefault(); $("#card").classList.toggle("flip"); }
+  if(e.key==="ArrowRight") $("#fcnext").click();
+  if(e.key==="ArrowLeft") $("#fcprev").click();
+});
+
+/* =========================================================
+   QUIZ
+   ========================================================= */
+let qz = null; let qsel = { chapters: CH.map(c=>c.id), n: 15 };
+function renderQuizSetup(){
+  const counts = c => Q.filter(q=>q.c===c).length;
+  $("#quizbox").innerHTML = `<div class="quiz-setup">
+    <div><div class="eyebrow" style="margin-bottom:8px">1. Kies hoofdstukken</div><div class="row" id="qch">${CH.map(c=>`<button class="chip" type="button" data-qc="${c.id}" aria-pressed="${qsel.chapters.includes(c.id)}">H${c.nr} ${c.title} <span class="mono" style="opacity:.7">${counts(c.id)}</span></button>`).join("")}</div></div>
+    <div><div class="eyebrow" style="margin-bottom:8px">2. Aantal vragen</div><div class="row" id="qn">${[10,15,25,"alle"].map(n=>`<button class="chip" type="button" data-qn="${n}" aria-pressed="${qsel.n===n}">${n}</button>`).join("")}</div></div>
+    <div class="row"><button class="btn primary" id="qstart" type="button">Start de quiz</button><span class="note">${Q.length} vragen in totaal · meerkeuze en juist/fout · uitleg bij elk antwoord</span></div>
+    ${Object.keys(state.best).length?`<div class="note">Beste scores: ${Object.entries(state.best).map(([k,v])=>`${k==="all"?"alle hoofdstukken":k.toUpperCase()}: <b>${v}%</b>`).join(" · ")}</div>`:""}
+  </div>`;
+  $("#qch").onclick=e=>{ const b=e.target.closest("[data-qc]"); if(!b) return; const id=b.dataset.qc; qsel.chapters = qsel.chapters.includes(id)? qsel.chapters.filter(x=>x!==id) : [...qsel.chapters,id]; if(!qsel.chapters.length) qsel.chapters=[id]; renderQuizSetup(); };
+  $("#qn").onclick=e=>{ const b=e.target.closest("[data-qn]"); if(!b) return; qsel.n = b.dataset.qn==="alle"?"alle":parseInt(b.dataset.qn,10); renderQuizSetup(); };
+  $("#qstart").onclick=()=>startQuiz(qsel);
+}
+function startQuiz(sel){
+  let pool = shuffle(Q.filter(q=>sel.chapters.includes(q.c)));
+  if(sel.n!=="alle") pool = pool.slice(0, sel.n);
+  pool = pool.map(q=>{ if(q.tf) return {...q, opts:["Juist","Fout"], ans: q.a?0:1};
+    const order = shuffle(q.o.map((_,i)=>i)); return {...q, opts: order.map(i=>q.o[i]), ans: order.indexOf(q.a)}; });
+  qz = { list: pool, i:0, score:0, answers:[], key: sel.chapters.length===CH.length?"all":sel.chapters.slice().sort().join("+") };
+  renderQ();
+}
+function renderQ(){
+  const q = qz.list[qz.i]; const s = secById(q.s);
+  $("#quizbox").innerHTML = `<div class="qcard">
+    <div class="qmeta"><span>Vraag ${qz.i+1} van ${qz.list.length} · ${q.tf?"Juist of fout?":"Meerkeuze"}</span><span>Hoofdstuk ${chById(q.c).nr} · score <b class="mono">${qz.score}</b></span></div>
+    <div class="qprog"><i style="width:${qz.i/qz.list.length*100}%"></i></div>
+    <p class="qtext">${esc(q.q)}</p>
+    <div class="opts">${q.opts.map((o,i)=>`<button class="opt" type="button" data-o="${i}"><span class="l">${q.tf?(i?"F":"J"):"ABCD"[i]}</span><span>${esc(o)}</span></button>`).join("")}</div>
+    <div id="qfb"></div>
+  </div>`;
+  $$(".opt").forEach(b=>b.onclick=()=>answer(parseInt(b.dataset.o,10)));
+}
+function answer(i){
+  const q = qz.list[qz.i]; const ok = i===q.ans; if(ok) qz.score++;
+  qz.answers.push({q, i, ok});
+  $$(".opt").forEach((b,k)=>{ b.disabled=true; if(k===q.ans) b.classList.add("right"); else if(k===i) b.classList.add("wrong"); });
+  const s=secById(q.s);
+  $("#qfb").innerHTML = `<div class="feedback ${ok?"ok":"ko"}"><b>${ok?"Juist!":"Niet juist."}</b>${esc(q.e)}
+    <div class="row" style="margin-top:10px"><button class="btn small" type="button" data-sec="${q.s}">Lees ${s.nr} ${esc(s.title)}</button>
+    <button class="btn primary small" id="qnext" type="button">${qz.i+1<qz.list.length?"Volgende vraag →":"Bekijk resultaat"}</button></div></div>`;
+  $("#qnext").focus();
+  $("#qnext").onclick=()=>{ qz.i++; if(qz.i<qz.list.length) renderQ(); else renderResult(); };
+}
+function renderResult(){
+  const pct = Math.round(qz.score/qz.list.length*100);
+  if(state.best[qz.key]==null || pct>state.best[qz.key]){ state.best[qz.key]=pct; store.set("best",state.best); }
+  const wrong = qz.answers.filter(a=>!a.ok);
+  $("#quizbox").innerHTML = `<div class="qcard result">
+    <div class="eyebrow">Resultaat</div>
+    <div class="big">${qz.score}/${qz.list.length}</div>
+    <p class="lead" style="margin:6px auto 16px">${pct}% juist. ${pct>=80?"Sterk, je kent deze leerstof goed.":pct>=50?"Goed op weg. Herlees de onderdelen bij je foute antwoorden.":"Herlees de theorie en probeer opnieuw."}</p>
+    <div class="row" style="justify-content:center">
+      ${wrong.length?`<button class="btn primary" id="qretry" type="button">Oefen enkel je ${wrong.length} foute vragen</button>`:""}
+      <button class="btn" id="qagain" type="button">Nieuwe quiz</button>
+    </div>
+    <div class="review">${qz.answers.map(a=>`<div class="${a.ok?"ok":"ko"}"><b>${esc(a.q.q)}</b><br>${a.ok?"✓":"✗ Jouw antwoord: "+esc(a.q.opts[a.i])+" ·"} Juist antwoord: <b>${esc(a.q.opts[a.q.ans])}</b> <button class="src" style="font-size:.8rem;color:var(--accent);background:none;border:0;padding:0;text-decoration:underline" type="button" data-sec="${a.q.s}">${secById(a.q.s).nr}</button></div>`).join("")}</div>
+  </div>`;
+  if(wrong.length) $("#qretry").onclick=()=>{ qz = { list: shuffle(wrong.map(a=>a.q)), i:0, score:0, answers:[], key:"retry" }; renderQ(); };
+  $("#qagain").onclick=renderQuizSetup;
+}
+
+/* =========================================================
+   KERNCIJFERS & KOPPELSPEL
+   ========================================================= */
+let figChap="all", figHide=false;
+function renderFigs(){
+  $("#figchips").innerHTML = [["all","Alle"],...CH.map(c=>[c.id,"H"+c.nr+" "+c.title])].map(([k,l])=>`<button class="chip" type="button" data-fg="${k}" aria-pressed="${figChap===k}">${l}</button>`).join("") +
+    `<button class="chip" type="button" id="fighide" aria-pressed="${figHide}">Verberg de cijfers</button>`;
+  $("#figs").innerHTML = FIGS.filter(f=>figChap==="all"||f.c===figChap).map((f,i)=>{ const s=secById(f.s);
+    return `<div class="fig ${figHide?"hide":""}" data-fi="${i}"><div class="v"><span>${esc(f.v)}</span></div><div class="d">${esc(f.d)}</div><button class="src" type="button" data-sec="${f.s}">${s.nr} · p. ${s.page}</button></div>`; }).join("");
+  $("#fighide").onclick=()=>{ figHide=!figHide; renderFigs(); };
+}
+$("#figchips").addEventListener("click",e=>{ const b=e.target.closest("[data-fg]"); if(b){ figChap=b.dataset.fg; renderFigs(); } });
+$("#figs").addEventListener("click",e=>{ if(e.target.closest("[data-sec]")) return; const f=e.target.closest(".fig"); if(f) f.classList.toggle("hide"); });
+
+let memo={pairs:[],sel:null,found:0,tries:0};
+function newMemo(){
+  const uniq=[]; const seen=new Set();
+  shuffle(FIGS).forEach(f=>{ if(!seen.has(f.v) && uniq.length<6){ seen.add(f.v); uniq.push(f); } });
+  memo={pairs:uniq,sel:null,found:0,tries:0};
+  const tiles = shuffle(uniq.flatMap((f,i)=>[{k:i,t:"v",x:f.v},{k:i,t:"d",x:f.d}]));
+  $("#memo").innerHTML = tiles.map(t=>`<button type="button" class="${t.t==="v"?"val":""}" data-k="${t.k}" data-t="${t.t}">${esc(t.x)}</button>`).join("");
+  $("#memoinfo").textContent="0 van 6 paren gevonden";
+}
+$("#memo").addEventListener("click",e=>{
+  const b=e.target.closest("button"); if(!b||b.classList.contains("done")) return;
+  $$("#memo .err").forEach(x=>x.classList.remove("err"));
+  if(!memo.sel){ memo.sel=b; b.classList.add("sel"); return; }
+  if(memo.sel===b){ b.classList.remove("sel"); memo.sel=null; return; }
+  if(memo.sel.dataset.t===b.dataset.t){ memo.sel.classList.remove("sel"); memo.sel=b; b.classList.add("sel"); return; }
+  memo.tries++;
+  if(memo.sel.dataset.k===b.dataset.k){ memo.sel.classList.remove("sel"); memo.sel.classList.add("done"); b.classList.add("done"); memo.found++; }
+  else { memo.sel.classList.remove("sel"); memo.sel.classList.add("err"); b.classList.add("err"); }
+  memo.sel=null;
+  $("#memoinfo").textContent = memo.found===6 ? `Alle 6 paren gevonden in ${memo.tries} pogingen.` : `${memo.found} van 6 paren gevonden · ${memo.tries} pogingen`;
+});
+$("#memonew").onclick=newMemo;
+
+/* =========================================================
+   REKENTOOLS
+   ========================================================= */
+function renderCalcs(){
+  $("#calcs").innerHTML = `
+  <div class="calc"><div class="eyebrow">Arbeider · 2.1.1</div><h3>Aantal wettelijke vakantiedagen</h3>
+    <div class="fields">
+      <div class="field"><label for="cA">A · gepresteerde + gelijkgestelde dagen</label><input id="cA" type="number" value="125" min="0" step="1"></div>
+      <div class="field"><label for="cR">R · dagen per week (contract)</label><input id="cR" type="number" value="4" min="1" max="7" step="0.5"></div>
+      <div class="field"><label for="cQ">Q · uren per week (contract)</label><input id="cQ" type="number" value="28" min="0" step="0.5"></div>
+      <div class="field"><label for="cS">S · uren per week voltijds</label><input id="cS" type="number" value="38" min="1" step="0.5"></div>
+    </div>
+    <div class="out" id="oArb"></div>
+    <button class="ref" type="button" data-sec="2-1-1">Theorie 2.1.1 en tabel</button></div>
+
+  <div class="calc"><div class="eyebrow">Bediende · 2.2.1</div><h3>Vakantiedagen bediende</h3>
+    <div class="fields">
+      <div class="field"><label for="cM">Gewerkte maanden in het vakantiedienstjaar</label><input id="cM" type="number" value="5" min="0" max="12" step="1"></div>
+    </div>
+    <div class="out" id="oBed"></div>
+    <button class="ref" type="button" data-sec="2-2-1">Theorie 2.2.1 en voorbeeld 2.2.2</button></div>
+
+  <div class="calc"><div class="eyebrow">Arbeider · 3.1.1</div><h3>Opsplitsing vakantiegeld arbeider</h3>
+    <div class="fields">
+      <div class="field"><label for="cL">Brutoloon van het vakantiedienstjaar (€)</label><input id="cL" type="number" value="30000" min="0" step="100"></div>
+    </div>
+    <div class="out" id="oVga"></div>
+    <p class="note">Toont enkel de opsplitsing uit de cursus: 15,38 % van het loon verhoogd tot 108 %. Eigen oefenbedrag.</p>
+    <button class="ref" type="button" data-sec="3-1-1">Theorie 3.1.1</button></div>
+
+  <div class="calc"><div class="eyebrow">Jeugd- en seniorvakantie · 1.2.4 / 1.3.4</div><h3>Daguitkering</h3>
+    <div class="fields">
+      <div class="field"><label for="cJ">Bruto maandloon (€)</label><input id="cJ" type="number" value="2500" min="0" step="10"></div>
+    </div>
+    <div class="out" id="oJv"></div>
+    <p class="note">Volgens de cursus: 65 %, loon begrensd tot € 2 837,89 per maand, gerekend in de zesdagenweek (/26), 10,09 % fiscale voorheffing. Eigen oefenbedrag.</p>
+    <button class="ref" type="button" data-sec="1-2-4">Theorie 1.2.4</button></div>
+
+  <div class="calc" style="grid-column:1/-1"><div class="eyebrow">Bediende · 4.1 en 4.2.1</div><h3>Vertrekvakantiegeld</h3>
+    <div class="fields">
+      <div class="field"><label for="vP">Bezoldigingen vorig vakantiedienstjaar (€)</label><input id="vP" type="number" value="36000" min="0" step="100"></div>
+      <div class="field"><label for="vR">Vakantiedagen waarop recht</label><input id="vR" type="number" value="24" min="0" step="1"></div>
+      <div class="field"><label for="vT">Reeds opgenomen dagen</label><input id="vT" type="number" value="8" min="0" step="1"></div>
+      <div class="field"><label for="vD">Dubbel vakantiegeld al betaald?</label><select id="vD"><option value="0">Nee</option><option value="1">Ja</option></select></div>
+      <div class="field"><label for="vC">Bezoldigingen lopend vakantiedienstjaar tot einddatum (€)</label><input id="vC" type="number" value="18000" min="0" step="100"></div>
+    </div>
+    <div class="out" id="oVt"></div>
+    <p class="note">Zelfde opbouw als het voorbeeld in 4.1 (24 dagen, 8 opgenomen, dubbel nog niet betaald). De bedragen zijn eigen oefenbedragen. Werkbonus is buiten beschouwing gelaten, zoals in de cursus.</p>
+    <button class="ref" type="button" data-sec="4-1">Theorie 4.1</button></div>
+
+  <div class="calc" style="grid-column:1/-1"><div class="eyebrow">Nieuwe werkgever · 4.4</div><h3>Vakantiedag op basis van een vakantieattest</h3>
+    <div class="fields">
+      <div class="field"><label for="nD">Bruto dagloon (€)</label><input id="nD" type="number" value="150" min="0" step="1"></div>
+      <div class="field"><label for="nN">Aantal vakantiedagen op basis van het attest</label><input id="nN" type="number" value="5" min="0" step="1"></div>
+    </div>
+    <div class="out" id="oNw"></div>
+    <button class="ref" type="button" data-sec="4-4">Theorie 4.4</button></div>`;
+  $$("#calcs input, #calcs select").forEach(i=>i.addEventListener("input",calc));
+  calc();
+}
+const val = id => parseFloat($("#"+id).value);
+const line = (l,v,tot)=>`<div class="line${tot?" tot":""}"><span>${l}</span><b>${v}</b></div>`;
+function calc(){
+  // arbeider dagen
+  const A=val("cA"),R=val("cR"),Qh=val("cQ"),S=val("cS");
+  if([A,R,Qh,S].every(x=>!isNaN(x)) && R>0 && S>0){
+    const raw=A*5/R*Qh/S, two=Math.round(raw*100)/100, rounded=roundRule(raw), row=dayLookup(rounded);
+    $("#oArb").innerHTML = line("Stap 1: "+nl(A,0)+" × 5/"+nl(R,R%1?1:0)+" × "+nl(Qh,Qh%1?1:0)+"/"+nl(S,S%1?1:0), nl(two)) +
+      line("Afgerond (decimalen &lt; 50 vallen weg, ≥ 50 naar boven)", nl(rounded,0)+" dagen") +
+      line("Stap 2: tabel ("+(row[1]===Infinity?row[0]+" en meer":"van "+row[0]+" tot "+row[1])+")", row[2]+" vakantiedagen", true);
+  } else $("#oArb").innerHTML = '<span class="note">Vul alle velden in met een geldig getal.</span>';
+  // bediende
+  let M=val("cM"); if(!isNaN(M)){ M=Math.max(0,Math.min(12,Math.floor(M))); const d6=M*2, d5=d6-Math.floor(d6/6);
+    $("#oBed").innerHTML = line("Zesdagenweek: "+M+" × 2", d6+" dagen") + line("Per schijf van 6 dagen 1 dag minder", "− "+Math.floor(d6/6)) + line("Vijfdagenweek", d5+" dagen", true); }
+  // vakantiegeld arbeider
+  const L=val("cL"); if(!isNaN(L)){ const b=L*1.08;
+    $("#oVga").innerHTML = line("Loon verhoogd tot 108 %", eur(b)) + line("8 % enkel vakantiegeld", eur(b*.08)) + line("6,8 % dubbel vakantiegeld", eur(b*.068)) + line("0,58 % aanvullende vakantievergoeding", eur(b*.0058)) + line("15,38 % totaal bruto vakantiegeld", eur(b*.1538), true); }
+  // jeugd/senior
+  const J=val("cJ"); if(!isNaN(J)){ const basis=Math.min(J,2837.89), dag=basis/26*.65, vh=dag*.1009;
+    $("#oJv").innerHTML = line("In aanmerking genomen maandloon (max. € 2 837,89)", eur(basis)) + line("Daguitkering: "+nl(basis)+" / 26 × 65 %", eur(dag)) + line("Fiscale voorheffing 10,09 %", "− "+eur(vh)) + line("Na voorheffing per dag", eur(dag-vh), true); }
+  // vertrek
+  const P=val("vP"),Rt=val("vR"),T=val("vT"),C=val("vC"),Dp=$("#vD").value==="1";
+  if([P,Rt,T,C].every(x=>!isNaN(x)) && Rt>0){
+    const rest=Math.max(0,Rt-T), enkel=rest/Rt*P*.0767, groot = rest>Rt/2, dub = (!Dp && groot)? P*.0767 : 0, cur=C*.1534;
+    const dubTxt = Dp ? "al betaald → 0" : (groot ? "7,67 % van "+eur(P) : "grootste deel al genomen → 0");
+    $("#oVt").innerHTML =
+      `<div class="eyebrow" style="margin-bottom:4px">Vorig vakantiedienstjaar</div>`+
+      line("Enkel: "+rest+"/"+Rt+" × 7,67 % × "+eur(P), eur(enkel)) +
+      line("Dubbel: "+dubTxt, eur(dub)) +
+      `<div class="eyebrow" style="margin:10px 0 4px">Lopend vakantiedienstjaar</div>`+
+      line("15,34 % × "+eur(C), eur(cur)) +
+      line("&nbsp;&nbsp;waarvan enkel 7,67 % (RSZ 13,07 %)", eur(C*.0767)) +
+      line("&nbsp;&nbsp;waarvan dubbel 6,80 % (BBDV 13,07 %)", eur(C*.068)) +
+      line("&nbsp;&nbsp;waarvan aanvullend dubbel 0,87 % (geen inhoudingen)", eur(C*.0087)) +
+      line("Totaal bruto vertrekvakantiegeld", eur(enkel+dub+cur), true);
+  } else $("#oVt").innerHTML='<span class="note">Vul alle velden in; “vakantiedagen waarop recht” moet groter zijn dan 0.</span>';
+  // nieuwe werkgever
+  const D=val("nD"),N=val("nN"); if(!isNaN(D)&&!isNaN(N)){
+    $("#oNw").innerHTML = line("Aftrek per vakantiedag: 90 % × "+eur(D), "− "+eur(D*.9)) + line("Bediende ontvangt per vakantiedag (10 %)", eur(D*.1)) + line("Voor "+N+" dag(en): totale aftrek", "− "+eur(D*.9*N)) + line("Voor "+N+" dag(en): ontvangen van de nieuwe werkgever", eur(D*.1*N), true) +
+      `<div class="note" style="margin-top:6px">Correctie in december of in de maand van uitdiensttreding; de aftrek is begrensd tot wat de werkgever zelf als vertrekvakantiegeld had moeten betalen.</div>`; }
+}
+
+/* =========================================================
+   VERGELIJKING
+   ========================================================= */
+function renderCmp(){
+  $("#cmp").innerHTML = `<tr><th>Onderwerp</th><th>Arbeider</th><th>Bediende</th><th>Bron</th></tr>` +
+    CMP.map(([a,b,c,s])=>`<tr><td>${a}</td><td>${b}</td><td>${c}</td><td><button class="src" style="font-size:.8rem;color:var(--accent);background:none;border:0;padding:0;text-decoration:underline;white-space:nowrap" type="button" data-sec="${s}">${secById(s).nr}</button></td></tr>`).join("");
+}
+
+/* =========================================================
+   ZOEKEN
+   ========================================================= */
+const INDEX = [
+  ...ALLSEC.map(s=>({type:"Theorie", title:s.title, nr:s.nr, text:strip(s.title+" "+s.html), sec:s.id})),
+  ...TERMS.map(t=>({type:"Begrip", title:t.t, nr:secById(t.s).nr, text:t.t+" "+t.d, sec:t.s})),
+  ...FIGS.map(f=>({type:"Kerncijfer", title:f.v, nr:secById(f.s).nr, text:f.v+" "+f.d, sec:f.s}))
+];
+function snippet(text, q){
+  const i = norm(text).indexOf(q); if(i<0) return esc(text.slice(0,160))+"…";
+  const a=Math.max(0,i-70), b=Math.min(text.length,i+q.length+90);
+  return (a>0?"…":"")+esc(text.slice(a,i))+"<mark>"+esc(text.slice(i,i+q.length))+"</mark>"+esc(text.slice(i+q.length,b))+(b<text.length?"…":"");
+}
+let prevView="home";
+function doSearch(){
+  const raw=$("#q").value.trim(), q=norm(raw);
+  if(!q){ if(state.view==="search") show(prevView); return; }
+  if(state.view!=="search"){ prevView=state.view; show("search",{noScroll:true}); }
+  const words=q.split(/\s+/);
+  const hits = INDEX.map(it=>{ const t=norm(it.text); if(!words.every(w=>t.includes(w))) return null;
+      let sc = (norm(it.title).includes(q)?10:0) + (t.split(q).length-1) + (it.type==="Begrip"?2:0); return {...it,sc}; })
+    .filter(Boolean).sort((a,b)=>b.sc-a.sc);
+  $("#srh").textContent = hits.length ? `${hits.length} resultaten voor “${raw}”` : `Geen resultaten voor “${raw}”`;
+  $("#sr").innerHTML = hits.slice(0,60).map(h=>`<button type="button" data-hit="${h.sec}"><span class="type">${h.type}</span><span class="t"><small>${h.nr}</small>${esc(h.title)}</span><span class="s">${snippet(h.text, words[0])}</span></button>`).join("") ||
+    `<p class="lead">Probeer een ander woord, bijvoorbeeld “gelijkgesteld”, “RJV”, “15,34” of “hoofdvakantie”.</p>`;
+}
+$("#q").addEventListener("input",doSearch);
+$("#q").addEventListener("keydown",e=>{ if(e.key==="Escape"){ $("#q").value=""; doSearch(); } });
+$("#sr").addEventListener("click",e=>{ const b=e.target.closest("[data-hit]"); if(!b) return; const term=$("#q").value.trim().split(/\s+/)[0]; show("learn",{sec:b.dataset.hit, hl:term}); });
+
+/* =========================================================
+   START
+   ========================================================= */
+renderTerms(); buildDeck(); renderFlash(); renderFigs(); newMemo(); renderCalcs(); renderCmp();
+(function boot(){
+  let h=""; try{ h=location.hash.replace("#",""); }catch(e){}
+  if(h && h[0]==="s" && secById(h.slice(1))) show("learn",{sec:h.slice(1)});
+  else if(["learn","terms","flash","quiz","figures","calc","compare"].includes(h)) show(h);
+  else show("home");
+})();
+</script>
+</body>
+</html>
